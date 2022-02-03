@@ -21,6 +21,67 @@
       "nin"
     ],
     "strokeCount": 2,
+    "derivatives": {
+      "人人": {
+        "id": "人人",
+        "variants": [
+          {
+            "written": "人々",
+            "pronounced": "ひとびと"
+          },
+          {
+            "written": "人々",
+            "pronounced": "にんにん"
+          },
+          {
+            "written": "人びと",
+            "pronounced": "ひとびと"
+          },
+          {
+            "written": "人人",
+            "pronounced": "ひとびと"
+          },
+          {
+            "written": "人人",
+            "pronounced": "にんにん"
+          }
+        ],
+        "definitions": [
+          [
+            "each person",
+            "people",
+            "men and women",
+            "everybody"
+          ]
+        ]
+      },
+      "人日": {
+        "id": "人日",
+        "variants": [
+          {
+            "written": "人日",
+            "pronounced": "にんにち"
+          },
+          {
+            "written": "人日",
+            "pronounced": "にんび"
+          },
+          {
+            "written": "人日",
+            "pronounced": "じんじつ"
+          }
+        ],
+        "definitions": [
+          [
+            "man-day",
+            "person-day"
+          ],
+          [
+            "seventh of January (lunar calendar) (one of the five annual festivals)"
+          ]
+        ]
+      }
+    },
     "jlpt": "N5",
     "strokeGif": "https://raw.githubusercontent.com/mistval/kanji_images/master/gifs/4eba.gif"
   },
@@ -44,6 +105,404 @@
       "itsu"
     ],
     "strokeCount": 1,
+    "derivatives": {
+      "一人": {
+        "id": "一人",
+        "variants": [
+          {
+            "written": "一人エッチ",
+            "pronounced": "ひとりエッチ"
+          },
+          {
+            "written": "一人につき",
+            "pronounced": "ひとりにつき"
+          },
+          {
+            "written": "一人で",
+            "pronounced": "ひとりで"
+          },
+          {
+            "written": "独りで",
+            "pronounced": "ひとりで"
+          },
+          {
+            "written": "１人で",
+            "pronounced": "ひとりで"
+          },
+          {
+            "written": "一人っきり",
+            "pronounced": "ひとりっきり"
+          },
+          {
+            "written": "独りっきり",
+            "pronounced": "ひとりっきり"
+          },
+          {
+            "written": "一人っ切り",
+            "pronounced": "ひとりっきり"
+          },
+          {
+            "written": "独りっ切り",
+            "pronounced": "ひとりっきり"
+          },
+          {
+            "written": "１人っきり",
+            "pronounced": "ひとりっきり"
+          },
+          {
+            "written": "１人っ切り",
+            "pronounced": "ひとりっきり"
+          },
+          {
+            "written": "一人ぼっち",
+            "pronounced": "ひとりぼっち"
+          },
+          {
+            "written": "独りぼっち",
+            "pronounced": "ひとりぼっち"
+          },
+          {
+            "written": "一人ぽっち",
+            "pronounced": "ひとりぽっち"
+          },
+          {
+            "written": "独りぽっち",
+            "pronounced": "ひとりぽっち"
+          },
+          {
+            "written": "独り法師",
+            "pronounced": "ひとりぼっち"
+          },
+          {
+            "written": "独り法師",
+            "pronounced": "ひとりぽっち"
+          },
+          {
+            "written": "たった一人",
+            "pronounced": "たったひとり"
+          },
+          {
+            "written": "たった１人",
+            "pronounced": "たったひとり"
+          },
+          {
+            "written": "たった独り",
+            "pronounced": "たったひとり"
+          },
+          {
+            "written": "一人",
+            "pronounced": "ひとり"
+          },
+          {
+            "written": "一人",
+            "pronounced": "いちにん"
+          },
+          {
+            "written": "独り",
+            "pronounced": "ひとり"
+          },
+          {
+            "written": "１人",
+            "pronounced": "ひとり"
+          },
+          {
+            "written": "１人",
+            "pronounced": "いちにん"
+          },
+          {
+            "written": "一人きり",
+            "pronounced": "ひとりきり"
+          },
+          {
+            "written": "独りきり",
+            "pronounced": "ひとりきり"
+          },
+          {
+            "written": "一人切り",
+            "pronounced": "ひとりきり"
+          },
+          {
+            "written": "独り切り",
+            "pronounced": "ひとりきり"
+          },
+          {
+            "written": "１人きり",
+            "pronounced": "ひとりきり"
+          },
+          {
+            "written": "１人切り",
+            "pronounced": "ひとりきり"
+          },
+          {
+            "written": "一人として",
+            "pronounced": "ひとりとして"
+          },
+          {
+            "written": "一人ずつ",
+            "pronounced": "ひとりずつ"
+          },
+          {
+            "written": "一人宛",
+            "pronounced": "ひとりずつ"
+          },
+          {
+            "written": "一人にする",
+            "pronounced": "ひとりにする"
+          },
+          {
+            "written": "独りにする",
+            "pronounced": "ひとりにする"
+          },
+          {
+            "written": "もう一人",
+            "pronounced": "もうひとり"
+          },
+          {
+            "written": "もう１人",
+            "pronounced": "もうひとり"
+          }
+        ],
+        "definitions": [
+          [
+            "masturbation",
+            "onanism"
+          ],
+          [
+            "per capita",
+            "per person"
+          ],
+          [
+            "alone",
+            "by oneself",
+            "voluntarily",
+            "spontaneously",
+            "automatically"
+          ],
+          [
+            "all on one's own"
+          ],
+          [
+            "aloneness",
+            "loneliness",
+            "solitude"
+          ],
+          [
+            "just one person",
+            "only one"
+          ],
+          [
+            "one person"
+          ],
+          [
+            "alone",
+            "unmarried",
+            "solitary"
+          ],
+          [
+            "all on one's own"
+          ],
+          [
+            "as one of"
+          ],
+          [
+            "one by one",
+            "one at a time",
+            "in turn"
+          ],
+          [
+            "to leave (someone) alone",
+            "to leave to oneself",
+            "to leave (someone) be"
+          ],
+          [
+            "another (person)",
+            "the other person",
+            "one more (person)"
+          ]
+        ]
+      },
+      "一日一日": {
+        "id": "一日一日",
+        "variants": [
+          {
+            "written": "一日一日",
+            "pronounced": "いちにちいちにち"
+          }
+        ],
+        "definitions": [
+          [
+            "gradually",
+            "day by day"
+          ],
+          [
+            "every day",
+            "each day"
+          ]
+        ]
+      },
+      "一一": {
+        "id": "一一",
+        "variants": [
+          {
+            "written": "一つ一つ",
+            "pronounced": "ひとつひとつ"
+          },
+          {
+            "written": "１つ１つ",
+            "pronounced": "ひとつひとつ"
+          },
+          {
+            "written": "一つひとつ",
+            "pronounced": "ひとつひとつ"
+          },
+          {
+            "written": "一々",
+            "pronounced": "いちいち"
+          },
+          {
+            "written": "一一",
+            "pronounced": "いちいち"
+          },
+          {
+            "written": "一つまた一つ",
+            "pronounced": "ひとつまたひとつ"
+          },
+          {
+            "written": "一つ又一つ",
+            "pronounced": "ひとつまたひとつ"
+          }
+        ],
+        "definitions": [
+          [
+            "one-by-one",
+            "separately",
+            "in detail"
+          ],
+          [
+            "one-by-one",
+            "separately"
+          ],
+          [
+            "every single",
+            "each and every",
+            "without omission",
+            "fully",
+            "in detail"
+          ],
+          [
+            "one by one",
+            "one after another"
+          ]
+        ]
+      },
+      "一日": {
+        "id": "一日",
+        "variants": [
+          {
+            "written": "一日",
+            "pronounced": "ついたち"
+          },
+          {
+            "written": "一日",
+            "pronounced": "いっぴ"
+          },
+          {
+            "written": "１日",
+            "pronounced": "ついたち"
+          },
+          {
+            "written": "朔日",
+            "pronounced": "ついたち"
+          },
+          {
+            "written": "朔日",
+            "pronounced": "さくじつ"
+          },
+          {
+            "written": "朔",
+            "pronounced": "ついたち"
+          },
+          {
+            "written": "一日",
+            "pronounced": "いちにち"
+          },
+          {
+            "written": "一日",
+            "pronounced": "いちじつ"
+          },
+          {
+            "written": "一日",
+            "pronounced": "ひとひ"
+          },
+          {
+            "written": "一日",
+            "pronounced": "ひとえ"
+          },
+          {
+            "written": "１日",
+            "pronounced": "いちにち"
+          },
+          {
+            "written": "１日",
+            "pronounced": "いちじつ"
+          },
+          {
+            "written": "１日",
+            "pronounced": "ひとひ"
+          },
+          {
+            "written": "１日",
+            "pronounced": "ひとえ"
+          }
+        ],
+        "definitions": [
+          [
+            "first day of the month"
+          ],
+          [
+            "first ten days of the lunar month"
+          ],
+          [
+            "one day"
+          ],
+          [
+            "first day of the month"
+          ]
+        ]
+      },
+      "一人一人": {
+        "id": "一人一人",
+        "variants": [
+          {
+            "written": "一人一人",
+            "pronounced": "ひとりひとり"
+          },
+          {
+            "written": "一人一人",
+            "pronounced": "ひとりびとり"
+          },
+          {
+            "written": "１人１人",
+            "pronounced": "ひとりひとり"
+          },
+          {
+            "written": "１人１人",
+            "pronounced": "ひとりびとり"
+          },
+          {
+            "written": "一人ひとり",
+            "pronounced": "ひとりひとり"
+          }
+        ],
+        "definitions": [
+          [
+            "one by one",
+            "each",
+            "one at a time"
+          ]
+        ]
+      }
+    },
     "jlpt": "N5",
     "strokeGif": "https://raw.githubusercontent.com/mistval/kanji_images/master/gifs/4e00.gif"
   },
@@ -69,6 +528,91 @@
       "jitsu"
     ],
     "strokeCount": 4,
+    "derivatives": {
+      "日日": {
+        "id": "日日",
+        "variants": [
+          {
+            "written": "その日その日",
+            "pronounced": "そのひそのひ"
+          },
+          {
+            "written": "日日",
+            "pronounced": "ひにち"
+          },
+          {
+            "written": "日にち",
+            "pronounced": "ひにち"
+          },
+          {
+            "written": "日々",
+            "pronounced": "ひび"
+          },
+          {
+            "written": "日々",
+            "pronounced": "にちにち"
+          },
+          {
+            "written": "日日",
+            "pronounced": "ひび"
+          },
+          {
+            "written": "日日",
+            "pronounced": "にちにち"
+          },
+          {
+            "written": "日に日に",
+            "pronounced": "ひにひに"
+          }
+        ],
+        "definitions": [
+          [
+            "each day",
+            "from day to day",
+            "day-to-day"
+          ],
+          [
+            "the number of days",
+            "date"
+          ],
+          [
+            "every day",
+            "daily",
+            "day after day",
+            "days (e.g. good old days)"
+          ],
+          [
+            "day by day",
+            "by the day"
+          ],
+          [
+            "daily",
+            "every day"
+          ]
+        ]
+      },
+      "日一日": {
+        "id": "日一日",
+        "variants": [
+          {
+            "written": "日がな一日",
+            "pronounced": "ひがないちにち"
+          },
+          {
+            "written": "日一日と",
+            "pronounced": "ひいちにちと"
+          }
+        ],
+        "definitions": [
+          [
+            "all day long"
+          ],
+          [
+            "day by day"
+          ]
+        ]
+      }
+    },
     "jlpt": "N5",
     "strokeGif": "https://raw.githubusercontent.com/mistval/kanji_images/master/gifs/65e5.gif"
   }

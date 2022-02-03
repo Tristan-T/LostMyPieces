@@ -9,6 +9,8 @@ const JishoApi = require('unofficial-jisho-api');
 const jisho = new JishoApi();
 //Database creation duration
 const { PerformanceObserver, performance } = require('perf_hooks');
+//List of deduplicated loaded kanjis
+let kanjisUniq = []
 
 
 
@@ -55,18 +57,98 @@ async function getKanjiapiData(kanji) {
     "strokeCount" : response.data.stroke_count
   }
   //Get the words made up of this kanji
-  // jsonTotal[kanji]["derivatives"] = await getDerivatives(kanji);
+  result["derivatives"] = await getDerivatives(kanji);
   //Number of words found
-  // jsonTotal[kanji]["numberDerivatives"] = Object.keys(jsonTotal[kanji]["derivatives"]).length;
+  //result["numberDerivatives"] = Object.keys(result["derivatives"]).length;
   return result;
 }
 
+/**
+* Return a JSON object containing all the words that can be made from the kanji in parameter
+*
+* @param {string} kanji The kanji to be treated.
+* @return {json} List of words made from the kanji.
+*/
 async function getDerivatives(kanji) {
+  //API call
+  response = await axios.get(encodeURI('https://kanjiapi.dev/v1/words/'+kanji));
+  /**
+  * KanjiAPI will return a list of words made up from the kanji sent in parameter
+  * Each element of the list is one word
+  * Each word can be written and pronounced differently, this is stored in variants
+  * Each variant does not necessarily have a different meaning, this is stored in meanings
+  * If a variant has a different definition, it'll be put in glosses inside meanings
+  * glosses usually have multiple examples for the same word
+  */
 
+  let result = {}
+
+  for(derivative of response.data) {                                        //Iterate through the list of all words made up from "kanji"
+    let variant = derivative.variants[0].written                            //The first variant is the most common way to write a word
+    let strippedVariant = stripKanjiFromKana(variant)
+    if(strippedVariant.length>1 && strippedVariant[0]===kanji) {
+      let listOtherKanjis = Array.from(strippedVariant.substring(1))        //Make a list from the remaining kanjis in the word
+      if(listOtherKanjis.every((e) => {return kanjisUniq.includes(e)})) {   //Check if all the other kanjis are part of our kanji set
+        //If the world already exists, we update its values
+        if(strippedVariant in result) {
+          //TODO : CHECK FOR DUPLICATES
+          for(variant of derivative.variants) {
+            result[strippedVariant].variants.push({
+              written:variant.written,
+              pronounced:variant.pronounced
+            })
+          }
+
+          for(definition of derivative.meanings) {
+            result[strippedVariant].definitions.push(definition.glosses)
+          }
+        } else {
+          let variants = []
+          for(let variant of derivative.variants) {
+            variants.push({
+              written:variant.written,
+              pronounced:variant.pronounced
+            })
+          }
+
+          let definitions = []
+          for(let definition of derivative.meanings) {
+            definitions.push(definition.glosses)
+          }
+
+          result[strippedVariant] = {
+            id: strippedVariant,
+            variants: variants,
+            definitions: definitions
+          }
+        }
+      }
+    }
+  }
+
+  return result;
 }
 
+/**
+* Given a kanji, it will return a string containing only the kanjis making it up, thus removing the kanas
+*
+* @param {string} kanji The kanji to be treated.
+* @return {string} The stripped kanji.
+*/
+function stripKanjiFromKana(kanji) {
+  //Hiragana (3040 - 309f)
+  let result = kanji.replaceAll(/[\u3040-\u309F]/g, "")
+  //Katakana (30a0 - 30ff)
+  result = result.replaceAll(/[\u30A0-\u30FF]/g, "")
+  //Full-width roman characters and half-width katakana ( ff00 - ffef)
+  result = result.replaceAll(/[\uFF00-\uFFEF]/g, "")
+  //Also replace the iteration mark 々々
+  for(let i=0; i<result.length; i++) {
+    if(result[i] === "々") result = result.replace("々", result[i-1]);
+  }
 
-
+  return result
+}
 
 
 /**
@@ -93,7 +175,7 @@ async function main() {
     console.log(kanjis["kanjis"])
 
     //Transform into Set then back into Array to delete duplicates
-    let kanjisUniq = Array.from(new Set(kanjis["kanjis"]))
+    kanjisUniq = Array.from(new Set(kanjis["kanjis"]))
 
     let jsonPromises = []
 
