@@ -21,9 +21,15 @@
       "nin"
     ],
     "strokeCount": 2,
-    "derivatives": {
-      "人人": {
+    "derivatives": [
+      {
         "id": "人人",
+        "trueReading": "人々",
+        "components": [
+          "人",
+          "人"
+        ],
+        "relationship": "l2",
         "variants": [
           {
             "written": "人々",
@@ -55,8 +61,14 @@
           ]
         ]
       },
-      "人日": {
+      {
         "id": "人日",
+        "trueReading": "人日",
+        "components": [
+          "人",
+          "日"
+        ],
+        "relationship": "l2",
         "variants": [
           {
             "written": "人日",
@@ -81,7 +93,7 @@
           ]
         ]
       }
-    },
+    ],
     "jlpt": "N5",
     "strokeGif": "https://raw.githubusercontent.com/mistval/kanji_images/master/gifs/4eba.gif"
   },
@@ -105,9 +117,15 @@
       "itsu"
     ],
     "strokeCount": 1,
-    "derivatives": {
-      "一人": {
+    "derivatives": [
+      {
         "id": "一人",
+        "trueReading": "一人エッチ",
+        "components": [
+          "一",
+          "人"
+        ],
+        "relationship": "l2",
         "variants": [
           {
             "written": "一人エッチ",
@@ -321,8 +339,16 @@
           ]
         ]
       },
-      "一日一日": {
+      {
         "id": "一日一日",
+        "trueReading": "一日一日",
+        "components": [
+          "一",
+          "日",
+          "一",
+          "日"
+        ],
+        "relationship": "l4",
         "variants": [
           {
             "written": "一日一日",
@@ -340,8 +366,14 @@
           ]
         ]
       },
-      "一一": {
+      {
         "id": "一一",
+        "trueReading": "一つ一つ",
+        "components": [
+          "一",
+          "一"
+        ],
+        "relationship": "l2",
         "variants": [
           {
             "written": "一つ一つ",
@@ -395,8 +427,14 @@
           ]
         ]
       },
-      "一日": {
+      {
         "id": "一日",
+        "trueReading": "一日",
+        "components": [
+          "一",
+          "日"
+        ],
+        "relationship": "l2",
         "variants": [
           {
             "written": "一日",
@@ -470,8 +508,16 @@
           ]
         ]
       },
-      "一人一人": {
+      {
         "id": "一人一人",
+        "trueReading": "一人一人",
+        "components": [
+          "一",
+          "人",
+          "一",
+          "人"
+        ],
+        "relationship": "l4",
         "variants": [
           {
             "written": "一人一人",
@@ -502,7 +548,7 @@
           ]
         ]
       }
-    },
+    ],
     "jlpt": "N5",
     "strokeGif": "https://raw.githubusercontent.com/mistval/kanji_images/master/gifs/4e00.gif"
   },
@@ -528,9 +574,15 @@
       "jitsu"
     ],
     "strokeCount": 4,
-    "derivatives": {
-      "日日": {
+    "derivatives": [
+      {
         "id": "日日",
+        "trueReading": "その日その日",
+        "components": [
+          "日",
+          "日"
+        ],
+        "relationship": "l2",
         "variants": [
           {
             "written": "その日その日",
@@ -591,8 +643,15 @@
           ]
         ]
       },
-      "日一日": {
+      {
         "id": "日一日",
+        "trueReading": "日がな一日",
+        "components": [
+          "日",
+          "一",
+          "日"
+        ],
+        "relationship": "l3",
         "variants": [
           {
             "written": "日がな一日",
@@ -612,7 +671,7 @@
           ]
         ]
       }
-    },
+    ],
     "jlpt": "N5",
     "strokeGif": "https://raw.githubusercontent.com/mistval/kanji_images/master/gifs/65e5.gif"
   }

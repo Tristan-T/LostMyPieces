@@ -57,7 +57,7 @@ async function getKanjiapiData(kanji) {
     "strokeCount" : response.data.stroke_count
   }
   //Get the words made up of this kanji
-  result["derivatives"] = await getDerivatives(kanji);
+  result["derivatives"] = Object.values(await getDerivatives(kanji));
   //Number of words found
   //result["numberDerivatives"] = Object.keys(result["derivatives"]).length;
   return result;
@@ -118,6 +118,9 @@ async function getDerivatives(kanji) {
 
           result[strippedVariant] = {
             id: strippedVariant,
+            trueReading: variant,
+            components: Array.from(strippedVariant),
+            relationship: "l"+strippedVariant.length,
             variants: variants,
             definitions: definitions
           }
