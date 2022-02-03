@@ -1,0 +1,75 @@
+[
+  {
+    "kanji": "人",
+    "meaning": "person",
+    "kun_readings": [
+      "ひと",
+      "-り",
+      "-と"
+    ],
+    "on_readings": [
+      "ジン",
+      "ニン"
+    ],
+    "romaji_kun": [
+      "hito",
+      "-ri",
+      "-to"
+    ],
+    "romaji_on": [
+      "jin",
+      "nin"
+    ],
+    "strokeCount": 2,
+    "jlpt": "N5",
+    "strokeGif": "https://raw.githubusercontent.com/mistval/kanji_images/master/gifs/4eba.gif"
+  },
+  {
+    "kanji": "一",
+    "meaning": "one",
+    "kun_readings": [
+      "ひと-",
+      "ひと.つ"
+    ],
+    "on_readings": [
+      "イチ",
+      "イツ"
+    ],
+    "romaji_kun": [
+      "hito-",
+      "hito.tsu"
+    ],
+    "romaji_on": [
+      "ichi",
+      "itsu"
+    ],
+    "strokeCount": 1,
+    "jlpt": "N5",
+    "strokeGif": "https://raw.githubusercontent.com/mistval/kanji_images/master/gifs/4e00.gif"
+  },
+  {
+    "kanji": "日",
+    "meaning": "day",
+    "kun_readings": [
+      "ひ",
+      "-び",
+      "-か"
+    ],
+    "on_readings": [
+      "ニチ",
+      "ジツ"
+    ],
+    "romaji_kun": [
+      "hi",
+      "-bi",
+      "-ka"
+    ],
+    "romaji_on": [
+      "nichi",
+      "jitsu"
+    ],
+    "strokeCount": 4,
+    "jlpt": "N5",
+    "strokeGif": "https://raw.githubusercontent.com/mistval/kanji_images/master/gifs/65e5.gif"
+  }
+]
