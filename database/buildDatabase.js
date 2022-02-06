@@ -83,46 +83,52 @@ async function getDerivatives(kanji) {
 
   let result = {}
 
-  for(derivative of response.data) {                                        //Iterate through the list of all words made up from "kanji"
-    let variant = derivative.variants[0].written                            //The first variant is the most common way to write a word
-    let strippedVariant = stripKanjiFromKana(variant)
-    if(strippedVariant.length>1 && strippedVariant[0]===kanji) {
-      let listOtherKanjis = Array.from(strippedVariant.substring(1))        //Make a list from the remaining kanjis in the word
-      if(listOtherKanjis.every((e) => {return kanjisUniq.includes(e)})) {   //Check if all the other kanjis are part of our kanji set
-        //If the world already exists, we update its values
-        if(strippedVariant in result) {
-          //TODO : CHECK FOR DUPLICATES
-          for(variant of derivative.variants) {
-            result[strippedVariant].variants.push({
-              written:variant.written,
-              pronounced:variant.pronounced
-            })
-          }
+  for(let derivative of response.data) {                                        //Iterate through the list of all words made up from "kanji"
+    for(let variant of derivative.variants) {
+      let strippedVariant = stripKanjiFromKana(variant.written)
+      if(variant.written.length<=strippedVariant.length+1) {                            //If there is more than one kana in the variant, we won't use it
+        if(strippedVariant.length>1 && strippedVariant[0]===kanji) {
+          let listOtherKanjis = Array.from(strippedVariant.substring(1))        //Make a list from the remaining kanjis in the word
+          if(listOtherKanjis.every((e) => {return kanjisUniq.includes(e)})) {   //Check if all the other kanjis are part of our kanji set
+            //If the world already exists, we update its values
+            if(strippedVariant in result) {
+              result[strippedVariant].variants.push({
+                written:variant.written,
+                pronounced:variant.pronounced
+              })
 
-          for(definition of derivative.meanings) {
-            result[strippedVariant].definitions.push(definition.glosses)
-          }
-        } else {
-          let variants = []
-          for(let variant of derivative.variants) {
-            variants.push({
-              written:variant.written,
-              pronounced:variant.pronounced
-            })
-          }
+              //Checking for duplicates
+              //cf : https://stackoverflow.com/questions/19543514/check-whether-an-array-exists-in-an-array-of-arrays
+              let stringifiedDefinitions = JSON.stringify(result[strippedVariant].definitions)
+              for(definition of derivative.meanings) {
+                //This assumes that derivative.meanings doesn't contain the same definition twice
+                let stringifiedNewDef = JSON.stringify(definition.glosses)
+                if(stringifiedDefinitions.indexOf(stringifiedNewDef)==-1) {
+                  result[strippedVariant].definitions.push(definition.glosses)
+                }
+              }
+            } else {
+              let variants = []
+              variants.push({
+                written:variant.written,
+                pronounced:variant.pronounced
+              })
 
-          let definitions = []
-          for(let definition of derivative.meanings) {
-            definitions.push(definition.glosses)
-          }
+              let definitions = []
+              for(let definition of derivative.meanings) {
+                definitions.push(definition.glosses)
+              }
 
-          result[strippedVariant] = {
-            id: strippedVariant,
-            trueReading: variant,
-            components: Array.from(strippedVariant),
-            relationship: "l"+strippedVariant.length,
-            variants: variants,
-            definitions: definitions
+              result[strippedVariant] = {
+                id: strippedVariant,
+                trueReading: variant.pronounced,
+                priorities: variant.priorities,
+                components: Array.from(strippedVariant),
+                relationship: "l"+strippedVariant.length,
+                variants: variants,
+                definitions: definitions
+              }
+            }
           }
         }
       }
