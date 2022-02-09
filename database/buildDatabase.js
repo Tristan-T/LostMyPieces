@@ -14,8 +14,6 @@ let kanjisUniq = []
 
 
 
-
-
 /**
 * Return a JSON object with all the informations for the kanji in parameter
 *
@@ -177,6 +175,25 @@ async function getJishoData(kanji) {
   return result
 }
 
+
+
+
+
+/**
+* Block the program for x milliseconds
+*
+* @param {Number} The number of milliseconds the program will halt for.
+* @return {void} Doesn't return anything.
+*/
+// cf : https://www.sitepoint.com/delay-sleep-pause-wait/
+function sleep(milliseconds) {
+  const date = Date.now();
+  let currentDate = null;
+  do {
+    currentDate = Date.now();
+  } while (currentDate - date < milliseconds);
+}
+
 async function main() {
   try {
     //Read the file containing the list of kanjis
@@ -191,8 +208,14 @@ async function main() {
     //Start counter for time needed to create the db
     var t0 = performance.now()
 
+    let nbKanjis = kanjis["kanjis"].length
+    let nbTreated = 0
+
     for(let kanji of kanjis["kanjis"]) {
-      jsonPromises.push(getKanjiInfos(kanji))
+      nbTreated++
+      console.log("Kanji : " + kanji + " (" + nbTreated + "/" + nbKanjis + ": " + ((nbTreated*100)/nbKanjis).toFixed(2) + "%)")
+      //await sleep(100);
+      jsonPromises.push(await getKanjiInfos(kanji))
     }
 
     jsonData = await Promise.all(jsonPromises)
