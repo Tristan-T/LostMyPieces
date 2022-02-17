@@ -1,0 +1,865 @@
+[
+  {
+    "kanji": "人",
+    "meaning": "person",
+    "kun_readings": [
+      "ひと",
+      "-り",
+      "-と"
+    ],
+    "on_readings": [
+      "ジン",
+      "ニン"
+    ],
+    "romaji_kun": [
+      "hito",
+      "-ri",
+      "-to"
+    ],
+    "romaji_on": [
+      "jin",
+      "nin"
+    ],
+    "strokeCount": 2,
+    "derivatives": [
+      {
+        "id": "人子一人",
+        "trueReading": "ひとっこひとり",
+        "priorities": [],
+        "components": [
+          "人",
+          "子",
+          "一",
+          "人"
+        ],
+        "relationship": "l4",
+        "variants": [
+          {
+            "written": "人っ子一人",
+            "pronounced": "ひとっこひとり"
+          }
+        ],
+        "definitions": [
+          [
+            "(not) a soul",
+            "(not) a single person"
+          ]
+        ]
+      },
+      {
+        "id": "人人",
+        "trueReading": "ひとびと",
+        "priorities": [
+          "news1",
+          "ichi1",
+          "nf01"
+        ],
+        "components": [
+          "人",
+          "人"
+        ],
+        "relationship": "l2",
+        "variants": [
+          {
+            "written": "人々",
+            "pronounced": "ひとびと"
+          },
+          {
+            "written": "人々",
+            "pronounced": "にんにん"
+          },
+          {
+            "written": "人人",
+            "pronounced": "ひとびと"
+          },
+          {
+            "written": "人人",
+            "pronounced": "にんにん"
+          }
+        ],
+        "definitions": [
+          [
+            "each person",
+            "people",
+            "men and women",
+            "everybody"
+          ]
+        ]
+      },
+      {
+        "id": "人子",
+        "trueReading": "ひとっこ",
+        "priorities": [],
+        "components": [
+          "人",
+          "子"
+        ],
+        "relationship": "l2",
+        "variants": [
+          {
+            "written": "人っ子",
+            "pronounced": "ひとっこ"
+          },
+          {
+            "written": "人の子",
+            "pronounced": "ひとのこ"
+          }
+        ],
+        "definitions": [
+          [
+            "person",
+            "man"
+          ],
+          [
+            "child",
+            "children"
+          ],
+          [
+            "other people's children"
+          ],
+          [
+            "the Son of Man",
+            "Christ"
+          ]
+        ]
+      },
+      {
+        "id": "人日",
+        "trueReading": "にんにち",
+        "priorities": [],
+        "components": [
+          "人",
+          "日"
+        ],
+        "relationship": "l2",
+        "variants": [
+          {
+            "written": "人日",
+            "pronounced": "にんにち"
+          },
+          {
+            "written": "人日",
+            "pronounced": "にんび"
+          },
+          {
+            "written": "人日",
+            "pronounced": "じんじつ"
+          }
+        ],
+        "definitions": [
+          [
+            "man-day",
+            "person-day"
+          ],
+          [
+            "seventh of January (lunar calendar) (one of the five annual festivals)"
+          ]
+        ]
+      }
+    ],
+    "jlpt": "N5",
+    "strokeGif": "https://raw.githubusercontent.com/mistval/kanji_images/master/gifs/4eba.gif"
+  },
+  {
+    "kanji": "一",
+    "meaning": "one",
+    "kun_readings": [
+      "ひと-",
+      "ひと.つ"
+    ],
+    "on_readings": [
+      "イチ",
+      "イツ"
+    ],
+    "romaji_kun": [
+      "hito-",
+      "hito.tsu"
+    ],
+    "romaji_on": [
+      "ichi",
+      "itsu"
+    ],
+    "strokeCount": 1,
+    "derivatives": [
+      {
+        "id": "一日一日",
+        "trueReading": "いちにちいちにち",
+        "priorities": [],
+        "components": [
+          "一",
+          "日",
+          "一",
+          "日"
+        ],
+        "relationship": "l4",
+        "variants": [
+          {
+            "written": "一日一日",
+            "pronounced": "いちにちいちにち"
+          }
+        ],
+        "definitions": [
+          [
+            "gradually",
+            "day by day"
+          ],
+          [
+            "every day",
+            "each day"
+          ]
+        ]
+      },
+      {
+        "id": "一人子",
+        "trueReading": "ひとりご",
+        "priorities": [
+          "news2",
+          "nf37"
+        ],
+        "components": [
+          "一",
+          "人",
+          "子"
+        ],
+        "relationship": "l3",
+        "variants": [
+          {
+            "written": "一人子",
+            "pronounced": "ひとりご"
+          },
+          {
+            "written": "一人っ子",
+            "pronounced": "ひとりっこ"
+          },
+          {
+            "written": "一人子",
+            "pronounced": "ひとりっこ"
+          }
+        ],
+        "definitions": [
+          [
+            "(an) only child"
+          ]
+        ]
+      },
+      {
+        "id": "一人",
+        "trueReading": "ひとりで",
+        "priorities": [
+          "ichi1"
+        ],
+        "components": [
+          "一",
+          "人"
+        ],
+        "relationship": "l2",
+        "variants": [
+          {
+            "written": "一人で",
+            "pronounced": "ひとりで"
+          },
+          {
+            "written": "一人",
+            "pronounced": "ひとり"
+          },
+          {
+            "written": "一人",
+            "pronounced": "いちにん"
+          }
+        ],
+        "definitions": [
+          [
+            "alone",
+            "by oneself",
+            "voluntarily",
+            "spontaneously",
+            "automatically"
+          ],
+          [
+            "one person"
+          ],
+          [
+            "alone",
+            "unmarried",
+            "solitary"
+          ]
+        ]
+      },
+      {
+        "id": "一日",
+        "trueReading": "つきたち",
+        "priorities": [],
+        "components": [
+          "一",
+          "日"
+        ],
+        "relationship": "l2",
+        "variants": [
+          {
+            "written": "一日",
+            "pronounced": "つきたち"
+          },
+          {
+            "written": "一日",
+            "pronounced": "ついたち"
+          },
+          {
+            "written": "一日",
+            "pronounced": "いっぴ"
+          },
+          {
+            "written": "一日",
+            "pronounced": "いちにち"
+          },
+          {
+            "written": "一日",
+            "pronounced": "いちじつ"
+          },
+          {
+            "written": "一日",
+            "pronounced": "ひとひ"
+          },
+          {
+            "written": "一日",
+            "pronounced": "ひとえ"
+          }
+        ],
+        "definitions": [
+          [
+            "first day of the month"
+          ],
+          [
+            "first ten days of the lunar month"
+          ],
+          [
+            "one day"
+          ]
+        ]
+      },
+      {
+        "id": "一子",
+        "trueReading": "いっし",
+        "priorities": [
+          "news2",
+          "nf37"
+        ],
+        "components": [
+          "一",
+          "子"
+        ],
+        "relationship": "l2",
+        "variants": [
+          {
+            "written": "一子",
+            "pronounced": "いっし"
+          }
+        ],
+        "definitions": [
+          [
+            "one child"
+          ],
+          [
+            "only child"
+          ],
+          [
+            "one of several children (esp. the son and heir)"
+          ],
+          [
+            "one stone (in the game of go)"
+          ]
+        ]
+      },
+      {
+        "id": "一人一人",
+        "trueReading": "ひとりひとり",
+        "priorities": [
+          "news2",
+          "nf36",
+          "ichi1"
+        ],
+        "components": [
+          "一",
+          "人",
+          "一",
+          "人"
+        ],
+        "relationship": "l4",
+        "variants": [
+          {
+            "written": "一人一人",
+            "pronounced": "ひとりひとり"
+          },
+          {
+            "written": "一人一人",
+            "pronounced": "ひとりびとり"
+          }
+        ],
+        "definitions": [
+          [
+            "one by one",
+            "each",
+            "one at a time"
+          ]
+        ]
+      },
+      {
+        "id": "一本",
+        "trueReading": "いっぽん",
+        "priorities": [
+          "nf03",
+          "news1"
+        ],
+        "components": [
+          "一",
+          "本"
+        ],
+        "relationship": "l2",
+        "variants": [
+          {
+            "written": "一本",
+            "pronounced": "いっぽん"
+          }
+        ],
+        "definitions": [
+          [
+            "one long cylindrical thing",
+            "one film, TV show, etc.",
+            "one goal, home run, etc.",
+            "one telephone call"
+          ],
+          [
+            "one version"
+          ],
+          [
+            "one book",
+            "a certain book"
+          ],
+          [
+            "ippon",
+            "one point",
+            "a blow"
+          ],
+          [
+            "experienced geisha"
+          ],
+          [
+            "single-minded focus on ..."
+          ]
+        ]
+      },
+      {
+        "id": "一一",
+        "trueReading": "いちいち",
+        "priorities": [
+          "ichi1"
+        ],
+        "components": [
+          "一",
+          "一"
+        ],
+        "relationship": "l2",
+        "variants": [
+          {
+            "written": "一々",
+            "pronounced": "いちいち"
+          },
+          {
+            "written": "一一",
+            "pronounced": "いちいち"
+          }
+        ],
+        "definitions": [
+          [
+            "one-by-one",
+            "separately"
+          ],
+          [
+            "every single",
+            "each and every",
+            "without omission",
+            "fully",
+            "in detail"
+          ]
+        ]
+      }
+    ],
+    "jlpt": "N5",
+    "strokeGif": "https://raw.githubusercontent.com/mistval/kanji_images/master/gifs/4e00.gif"
+  },
+  {
+    "kanji": "日",
+    "meaning": "day",
+    "kun_readings": [
+      "ひ",
+      "-び",
+      "-か"
+    ],
+    "on_readings": [
+      "ニチ",
+      "ジツ"
+    ],
+    "romaji_kun": [
+      "hi",
+      "-bi",
+      "-ka"
+    ],
+    "romaji_on": [
+      "nichi",
+      "jitsu"
+    ],
+    "strokeCount": 4,
+    "derivatives": [
+      {
+        "id": "日子",
+        "trueReading": "にっし",
+        "priorities": [],
+        "components": [
+          "日",
+          "子"
+        ],
+        "relationship": "l2",
+        "variants": [
+          {
+            "written": "日子",
+            "pronounced": "にっし"
+          }
+        ],
+        "definitions": [
+          [
+            "(number of) days"
+          ]
+        ]
+      },
+      {
+        "id": "日本一",
+        "trueReading": "にほんいち",
+        "priorities": [
+          "news1",
+          "nf06"
+        ],
+        "components": [
+          "日",
+          "本",
+          "一"
+        ],
+        "relationship": "l3",
+        "variants": [
+          {
+            "written": "日本一",
+            "pronounced": "にほんいち"
+          },
+          {
+            "written": "日本一",
+            "pronounced": "にっぽんいち"
+          }
+        ],
+        "definitions": [
+          [
+            "Japan's best",
+            "number one in Japan"
+          ]
+        ]
+      },
+      {
+        "id": "日本",
+        "trueReading": "にほん",
+        "priorities": [
+          "news2",
+          "spec1",
+          "nf25"
+        ],
+        "components": [
+          "日",
+          "本"
+        ],
+        "relationship": "l2",
+        "variants": [
+          {
+            "written": "日本",
+            "pronounced": "にほん"
+          },
+          {
+            "written": "日本",
+            "pronounced": "にっぽん"
+          },
+          {
+            "written": "日の本",
+            "pronounced": "ひのもと"
+          }
+        ],
+        "definitions": [
+          [
+            "Japan"
+          ]
+        ]
+      },
+      {
+        "id": "日日",
+        "trueReading": "ひにち",
+        "priorities": [
+          "news1",
+          "ichi1",
+          "nf23"
+        ],
+        "components": [
+          "日",
+          "日"
+        ],
+        "relationship": "l2",
+        "variants": [
+          {
+            "written": "日日",
+            "pronounced": "ひにち"
+          },
+          {
+            "written": "日々",
+            "pronounced": "ひび"
+          },
+          {
+            "written": "日々",
+            "pronounced": "にちにち"
+          },
+          {
+            "written": "日日",
+            "pronounced": "ひび"
+          },
+          {
+            "written": "日日",
+            "pronounced": "にちにち"
+          }
+        ],
+        "definitions": [
+          [
+            "the number of days",
+            "date"
+          ],
+          [
+            "every day",
+            "daily",
+            "day after day",
+            "days (e.g. good old days)"
+          ]
+        ]
+      },
+      {
+        "id": "日本人",
+        "trueReading": "にほんじん",
+        "priorities": [
+          "news1",
+          "nf01"
+        ],
+        "components": [
+          "日",
+          "本",
+          "人"
+        ],
+        "relationship": "l3",
+        "variants": [
+          {
+            "written": "日本人",
+            "pronounced": "にほんじん"
+          },
+          {
+            "written": "日本人",
+            "pronounced": "にっぽんじん"
+          }
+        ],
+        "definitions": [
+          [
+            "Japanese person",
+            "Japanese people"
+          ]
+        ]
+      },
+      {
+        "id": "日一日",
+        "trueReading": "ひいちにちと",
+        "priorities": [
+          "news2",
+          "nf39"
+        ],
+        "components": [
+          "日",
+          "一",
+          "日"
+        ],
+        "relationship": "l3",
+        "variants": [
+          {
+            "written": "日一日と",
+            "pronounced": "ひいちにちと"
+          }
+        ],
+        "definitions": [
+          [
+            "day by day"
+          ]
+        ]
+      }
+    ],
+    "jlpt": "N5",
+    "strokeGif": "https://raw.githubusercontent.com/mistval/kanji_images/master/gifs/65e5.gif"
+  },
+  {
+    "kanji": "本",
+    "meaning": "book",
+    "kun_readings": [
+      "もと"
+    ],
+    "on_readings": [
+      "ホン"
+    ],
+    "romaji_kun": [
+      "moto"
+    ],
+    "romaji_on": [
+      "hon"
+    ],
+    "strokeCount": 5,
+    "derivatives": [
+      {
+        "id": "本本",
+        "trueReading": "もともと",
+        "priorities": [
+          "ichi1"
+        ],
+        "components": [
+          "本",
+          "本"
+        ],
+        "relationship": "l2",
+        "variants": [
+          {
+            "written": "本々",
+            "pronounced": "もともと"
+          },
+          {
+            "written": "本本",
+            "pronounced": "もともと"
+          }
+        ],
+        "definitions": [
+          [
+            "originally",
+            "by nature",
+            "from the start"
+          ]
+        ]
+      },
+      {
+        "id": "本日",
+        "trueReading": "ほんじつ",
+        "priorities": [
+          "nf15",
+          "news1",
+          "ichi1"
+        ],
+        "components": [
+          "本",
+          "日"
+        ],
+        "relationship": "l2",
+        "variants": [
+          {
+            "written": "本日",
+            "pronounced": "ほんじつ"
+          }
+        ],
+        "definitions": [
+          [
+            "today"
+          ]
+        ]
+      },
+      {
+        "id": "本人",
+        "trueReading": "ほんにん",
+        "priorities": [
+          "nf02",
+          "news1",
+          "ichi1"
+        ],
+        "components": [
+          "本",
+          "人"
+        ],
+        "relationship": "l2",
+        "variants": [
+          {
+            "written": "本人",
+            "pronounced": "ほんにん"
+          }
+        ],
+        "definitions": [
+          [
+            "the person in question",
+            "the person themselves",
+            "said person"
+          ]
+        ]
+      }
+    ],
+    "jlpt": "N5",
+    "strokeGif": "https://raw.githubusercontent.com/mistval/kanji_images/master/gifs/672c.gif"
+  },
+  {
+    "kanji": "子",
+    "meaning": "child",
+    "kun_readings": [
+      "こ",
+      "-こ",
+      "ね"
+    ],
+    "on_readings": [
+      "シ",
+      "ス",
+      "ツ"
+    ],
+    "romaji_kun": [
+      "ko",
+      "-ko",
+      "ne"
+    ],
+    "romaji_on": [
+      "shi",
+      "su",
+      "tsu"
+    ],
+    "strokeCount": 3,
+    "derivatives": [
+      {
+        "id": "子日",
+        "trueReading": "ねのひ",
+        "priorities": [],
+        "components": [
+          "子",
+          "日"
+        ],
+        "relationship": "l2",
+        "variants": [
+          {
+            "written": "子の日",
+            "pronounced": "ねのひ"
+          },
+          {
+            "written": "子の日",
+            "pronounced": "ねのび"
+          }
+        ],
+        "definitions": [
+          [
+            "Day of the Rat (esp. the first Day of the Rat in the New Year)"
+          ],
+          [
+            "collecting herbs and pulling out young pine trees by the roots"
+          ],
+          [
+            "pine shoot pulled out in such a manner"
+          ]
+        ]
+      }
+    ],
+    "jlpt": "N5",
+    "strokeGif": "https://raw.githubusercontent.com/mistval/kanji_images/master/gifs/5b50.gif"
+  }
+]
