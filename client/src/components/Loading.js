@@ -1,6 +1,6 @@
 import {ReactComponent as LoadingLogo} from '../svg/loading.svg';
 
-function Loading() {
+const Loading = () => {
     return <div className="Loading h-screen w-screen flex items-center bg-orange-200">
         <div className="w-full">
             <div className="flex flex-col">

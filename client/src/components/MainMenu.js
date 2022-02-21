@@ -2,9 +2,10 @@ import { useState } from "react";
 import {Link} from "react-router-dom";
 import Loading from "./Loading";
 
-function MainMenu() {
+const MainMenu = () => {
     const [initialized, setInitialized] = useState(false);
 
+    // simulate loading
     setTimeout(() => setInitialized(true), 1000);
 
     if (!initialized) {
