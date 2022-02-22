@@ -1,39 +1,128 @@
 import React, {useEffect, useRef} from 'react';
 
-const WhiteBoard = ({kanjiOnBoard}) => {
+const WhiteBoard = ({kanjiOnBoard, onMerge, onAdd, onDelete}) => {
     const canvasRef = useRef(null);
     let dragging = false;
 
-    const drawCanvas = (canvas) => {
-        canvas.width = canvas.offsetWidth;
-        canvas.height = canvas.offsetHeight;
+    let tempProp;
 
-        /**
-         * @type {CanvasRenderingContext2D}
-         */
+    const processOverlap = (canvas, origin) => {
+        const testOverlap = (b1, b2) => {
+            if (b1.minX === b1.maxX || b1.minY === b1.maxY || b2.minX === b2.maxX || b2.minY === b2.maxY)
+                return false;
+
+            if (b1.minX >= b2.maxX || b2.minX >= b1.maxX)
+                return false;
+            if (b1.minY >= b2.maxY || b2.minY >= b1.maxY)
+                return false;
+
+            return true;
+        }
+
+        for (let i = 0; i < kanjiOnBoard.length; i++) {
+            const target = kanjiOnBoard[i];
+
+            if (target === origin)
+                continue;
+
+            const originBounds = getTextBound(canvas, origin);
+            const targetBounds = getTextBound(canvas, target);
+
+            if (testOverlap(originBounds, targetBounds)) {
+                console.log("Overlap !", origin.kanji, target.kanji);
+                onMerge(origin, target);
+            }
+        }
+    }
+
+    /**
+     * 
+     * @param {MouseEvent} event 
+     * @returns boolean that state if a change has been made
+     */
+    const hoverTest = (event) => {
+        let changed = false;
+
+        kanjiOnBoard.slice().reverse().every(v => {
+            const bounds = getTextBound(event.target, v);
+
+            // out of bound
+            if (event.pageX < bounds.minX || event.pageY < bounds.minY || event.pageX > bounds.maxX || event.pageY > bounds.maxY) {
+                if (v.hover)
+                    changed = true;
+
+                v.hover = false;
+                return true;
+            }
+
+            if (!v.hover)
+                changed = true;
+
+            v.hover = true;
+            return false;
+        });
+
+        return changed;
+    }
+
+    /**
+     * 
+     * @param {HTMLCanvasElement} canvas 
+     * @param {*} prop 
+     * @returns 
+     */
+    const getTextBound = (canvas, prop) => {
+        const {x, y} = prop.position;
+
         const context = canvas.getContext('2d');
 
-        kanjiOnBoard.forEach(v => {
-            const {x, y} = v.position;
+        const text = prop.kanji.replace(/./, "人");
 
-            const bounds = {
-                minX : x - 0.05,
-                minY : y - 0.05,
-                maxX : x + 0.05,
-                maxY : y + 0.05,
-            };
+        const textSize = context.measureText(text);
+        const height = textSize.actualBoundingBoxAscent + textSize.actualBoundingBoxDescent;
 
-            context.strokeStyle = v.hover ? "#FF0000" : "#00FF00";
-            context.strokeRect(bounds.minX * canvas.width, bounds.minY * canvas.height, 0.1 * canvas.width, 0.1 * canvas.height);
+        const bounds = {
+            minX : x * canvas.width - textSize.width / 2,
+            minY : y * canvas.height - height / 2,
+            maxX : x * canvas.width + textSize.width / 2,
+            maxY : y * canvas.height + height / 2,
+        };
 
+        return bounds;
+    }
+
+    /**
+     * 
+     * @param {HTMLCanvasElement} canvas 
+     */
+    const drawCanvas = (canvas) => {
+        const _drawProp = (prop) => {
+            const {x, y} = prop.position;
+
+            context.strokeStyle = prop.hover ? "#FF0000" : "#00FF00";
             context.font = '3em serif';
             context.textBaseline = 'middle';
             context.textAlign = "center";
-            context.fillText(v.kanji, x * canvas.width, y * canvas.height);
-        })
+
+            const bounds = getTextBound(canvas, prop);
+
+            context.strokeRect(
+                bounds.minX,
+                bounds.minY,
+                bounds.maxX - bounds.minX,
+                bounds.maxY - bounds.minY);
+            context.fillText(prop.kanji, x * canvas.width, y * canvas.height);
+        }
+        canvas.width = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
+
+        const context = canvas.getContext('2d');
+
+        kanjiOnBoard.forEach(_drawProp);
+        if (tempProp) _drawProp(tempProp);
     };
 
-    const CanvasRendering = () => {
+    const CanvasInit = () => {
         /**
          * @type {HTMLCanvasElement}
          */
@@ -47,63 +136,80 @@ const WhiteBoard = ({kanjiOnBoard}) => {
      * 
      * @param {MouseEvent} event 
      */
-    const OnMouseDown = (event) => {
-        const [relativeX, relativeY] = [ event.pageX / event.target.width, event.pageY / event.target.height ];
-
-        kanjiOnBoard.forEach(v => {
-            const bounds = {
-                minX : v.position.x - 0.05,
-                minY : v.position.y - 0.05,
-                maxX : v.position.x + 0.05,
-                maxY : v.position.y + 0.05,
-            };
+    const OnDoubleClick = (event) => {
+        kanjiOnBoard.slice().reverse().every(v => {
+            const bounds = getTextBound(event.target, v);
 
             // out of bound
-            if (relativeX < bounds.minX || relativeY < bounds.minY || relativeX > bounds.maxX || relativeY > bounds.maxY)
-                return;
+            if (event.pageX < bounds.minX || event.pageY < bounds.minY || event.pageX > bounds.maxX || event.pageY > bounds.maxY)
+                return true;
 
-            console.log("Clicked !");
-            v.clicked = true;
-            dragging = true;
+            onAdd({...v, position : {x : v.position.x + 0.005, y: v.position.y + 0.005}});
+
+            hoverTest(event);
+
+            drawCanvas(event.target);
+
+            return false;
         });
+    }
+
+    /**
+     * 
+     * @param {MouseEvent} event 
+     */
+    const OnMouseDown = (event) => {
+        event.preventDefault();
+
+        kanjiOnBoard.slice().reverse().every(v => {
+            const bounds = getTextBound(event.target, v);
+
+            // out of bound
+            if (event.pageX < bounds.minX || event.pageY < bounds.minY || event.pageX > bounds.maxX || event.pageY > bounds.maxY)
+                return true;
+
+            
+            
+            if (event.button === 2) { // right click
+                onDelete(v);
+            } else if (event.button === 0) { // left click
+                v.clicked = true;
+                dragging = true; 
+            }
+
+            return false;
+        });
+
+        drawCanvas(event.target);
     };
 
+    /**
+     * 
+     * @param {MouseEvent} event 
+     */
     const OnMouseMove = (event) => {
-        const [relativeX, relativeY] = [ event.pageX / event.target.width, event.pageY / event.target.height ];
+        let changed = false;
 
         if (!dragging) {
-            console.log("Mouse move");
-            kanjiOnBoard.forEach(v => {
-                const bounds = {
-                    minX : v.position.x - 0.05,
-                    minY : v.position.y - 0.05,
-                    maxX : v.position.x + 0.05,
-                    maxY : v.position.y + 0.05,
-                };
+            // cause too many draw calls
+            // kanjiOnBoard.forEach(v => { if (v.hover) changed = true; v.hover = false });
 
-                // out of bound
-                if (relativeX < bounds.minX || relativeY < bounds.minY || relativeX > bounds.maxX || relativeY > bounds.maxY) {
-                    v.hover = false;
-                    return;
-                }
-
-                console.log("Over kanji");
-                v.hover = true;
-
-            });
-            
-            drawCanvas(event.target);
-            return;
+            if (hoverTest(event)) {
+                changed = true;
+            }
         }
 
         kanjiOnBoard.forEach(v => {
             if (v.clicked) {
-                v.position.x = relativeX;
-                v.position.y = relativeY;
+                v.position.x = event.pageX / event.target.width;
+                v.position.y = event.pageY / event.target.height;
 
-                drawCanvas(event.target);
+                changed = true;
             }
         });
+
+        if (changed)
+            drawCanvas(event.target);
     };
 
     /**
@@ -111,17 +217,75 @@ const WhiteBoard = ({kanjiOnBoard}) => {
      * @param {MouseEvent} event 
      */
     const OnMouseUp = (event) => {
-        dragging = false;
+        if (dragging) {
+            dragging = false;
 
-        kanjiOnBoard.forEach(v => {
-            v.clicked = false;
-        });
+            kanjiOnBoard.forEach(v => {
+                if (v.clicked) {
+                    processOverlap(event.target, v);
+                }
+
+                v.clicked = false;
+            });
+
+            hoverTest(event);
+
+            drawCanvas(event.target);
+        }
     }
 
-    useEffect(() => CanvasRendering(canvasRef, kanjiOnBoard));
+    /**
+     * 
+     * @param {DragEvent} event 
+     */
+    const OnDragOver = (event) => {
+        event.preventDefault();
+        const kanji = JSON.parse(event.dataTransfer.getData("application/lost-my-pieces"));
+
+        const [canvasX, canvasY] = [event.pageX / event.target.width, event.pageY / event.target.height];
+
+        tempProp = {...kanji, position: {x: canvasX, y: canvasY}};
+
+        drawCanvas(event.target);
+    };
+
+    /**
+     * 
+     * @param {DragEvent} event 
+     */
+    const OnDragExit = (event) => { tempProp = undefined; drawCanvas(event.target); }
+
+    /**
+     * 
+     * @param {DragEvent} event 
+     */
+    const OnDrop = (event) => {
+        event.preventDefault();
+        const kanji = JSON.parse(event.dataTransfer.getData("application/lost-my-pieces"));
+        const [canvasX, canvasY] = [event.pageX / event.target.width, event.pageY / event.target.height];
+
+        const newProp = {...kanji, position: {x: canvasX, y: canvasY}};
+        onAdd(newProp);
+
+        processOverlap(event.target, newProp);
+    };
+
+    useEffect(CanvasInit);
 
     return (<div className = 'WhiteBoard h-full w-full bg-gray-200'>
-            <canvas ref = {canvasRef} className = 'h-full w-full' onMouseDown = {OnMouseDown} onMouseMove = {OnMouseMove} onMouseUp = {OnMouseUp}>
+            <canvas 
+                ref = {canvasRef} 
+                className = 'h-full w-full' 
+                onContextMenu={(e) => e.preventDefault()}
+                onDoubleClick = {OnDoubleClick}
+                onMouseDown = {OnMouseDown} 
+                onMouseMove = {OnMouseMove} 
+                onMouseUp = {OnMouseUp} 
+                onMouseLeave = {OnMouseUp}
+                onDragOver = {OnDragOver}
+                onDragExit = {OnDragExit}
+                onDrop = {OnDrop}
+            >
 
             </canvas>
     </div>);
