@@ -54,7 +54,6 @@ const getWord = async (req, reply) => {
   let queryRes = await req.neoSession.run(query, req.params);
   reply.type("application/json");
   return queryRes.records[0].get("w");
-  //return queryRes.records[0].get("w").properties;
 }
 
 /**
