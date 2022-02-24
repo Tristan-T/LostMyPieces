@@ -35,29 +35,28 @@ const getWord = async (req, reply) => {
 }
 
 const getCountCombinationShop = async (req, reply) => {
-  console.log('Get count combination shop with : ' + req.params.id);
-  req.params.id = JSON.parse(decodeURIComponent(req.params.id));
-  const query = ` WITH $id as kanji_list
+  console.log('Get count combination shop with : ' + req.body);
+  const query = ` WITH $listKanjis as kanji_list
                   MATCH (k:Kanji)-[:l2]->(w:Word)<-[:l2]-(k2:Kanji)
                   WHERE k2.kanji IN kanji_list AND NOT k.kanji IN kanji_list
                   RETURN k.kanji, COUNT(DISTINCT w) AS NB
                   UNION
-                  WITH $id as kanji_list
+                  WITH $listKanjis as kanji_list
                   MATCH (k:Kanji)-[:l3]->(w:Word)<-[:l3]-(k2:Kanji),(w)<-[:l3]-(k3:Kanji)
                   WHERE [k2.kanji, k3.kanji] IN kanji_list AND NOT k.kanji IN kanji_list
                   RETURN k.kanji, COUNT(DISTINCT w) AS NB
                   UNION
-                  WITH $id as kanji_list
+                  WITH $listKanjis as kanji_list
                   MATCH (k:Kanji)-[:l4]->(w:Word)<-[:l4]-(k2:Kanji),(k3:Kanji)-[:l4]->(w)<-[:l4]-(k4:Kanji)
                   WHERE k2.kanji IN kanji_list AND k3.kanji IN kanji_list AND k4.kanji IN kanji_list AND NOT k.kanji IN kanji_list
                   RETURN k.kanji, COUNT(DISTINCT w) AS NB
                   UNION
-                  WITH $id as kanji_list
+                  WITH $listKanjis as kanji_list
                   MATCH (k:Kanji)-[:l5]->(w:Word)<-[:l5]-(k2:Kanji),(k3:Kanji)-[:l5]->(w)<-[:l5]-(k4:Kanji), (k5:Kanji)-[:l5]->(w)
                   WHERE k2.kanji IN kanji_list AND k3.kanji IN kanji_list AND k4.kanji IN kanji_list AND k5.kanji IN kanji_list AND NOT k.kanji IN kanji_list
                   RETURN k.kanji, COUNT(DISTINCT w) AS NB
                 `
-  let queryRes = await req.neoSession.run(query, req.params);
+  let queryRes = await req.neoSession.run(query, {"listKanjis":req.body});
   reply.type("application/json");
   let result = {}
   for(let node of queryRes.records) {
@@ -83,9 +82,8 @@ const getTotalUse = async (req, reply) => {
 }
 
 const getMerge = async (req, reply) => {
-  console.log('Get words that can be made from : ' + req.params.id);
-  req.params.id = JSON.parse(decodeURIComponent(req.params.id));
-  listKanji = req.params.id.join('');
+  console.log('Get words that can be made from : ' + req.body);
+  listKanji = req.body.join('');
 
   reply.type("application/json");
 
@@ -112,28 +110,28 @@ async function mergeL2(neoSession, listKanji) {
   listKanji = listKanji.split('');
   const query = 'MATCH (k1:Kanji {kanji:$k1})-[:l2]->(w:Word)<-[:l2]-(k2:Kanji {kanji:$k2}) RETURN DISTINCT w';
   let queryRes = await neoSession.run(query, {"k1":listKanji[0], "k2":listKanji[1]});
-  return Array.from(queryRes.records, node => node.get("w"));
+  return Array.from(queryRes.records, node => node.get("w").properties);
 }
 
 async function mergeL3(neoSession, listKanji) {
   listKanji = listKanji.split('');
   const query = 'MATCH (k1:Kanji {kanji:$k1})-[:l3]->(w:Word)<-[:l3]-(k2:Kanji {kanji:$k2}), (k3:Kanji {kanji:$k3})-[:l3]->(w) RETURN DISTINCT w';
   let queryRes = await neoSession.run(query, {"k1":listKanji[0], "k2":listKanji[1], "k3":listKanji[2]});
-  return Array.from(queryRes.records, node => node.get("w"));
+  return Array.from(queryRes.records, node => node.get("w").properties);
 }
 
 async function mergeL4(neoSession, listKanji) {
   listKanji = listKanji.split('');
   const query = 'MATCH (k1:Kanji {kanji:$k1})-[:l4]->(w:Word)<-[:l4]-(k2:Kanji {kanji:$k2}), (k3:Kanji {kanji:$k3})-[:l4]->(w)<-[:l4]-(k4:Kanji {kanji:$k4}) RETURN DISTINCT w';
   let queryRes = await neoSession.run(query, {"k1":listKanji[0], "k2":listKanji[1], "k3":listKanji[2], "k4":listKanji[3]});
-  return Array.from(queryRes.records, node => node.get("w"));
+  return Array.from(queryRes.records, node => node.get("w").properties);
 }
 
 async function mergeL5(neoSession, listKanji) {
   listKanji = listKanji.split('');
   const query = 'MATCH (k1:Kanji {kanji:$k1})-[:l5]->(w:Word)<-[:l5]-(k2:Kanji {kanji:$k2}), (k3:Kanji {kanji:$k3})-[:l5]->(w)<-[:l5]-(k4:Kanji {kanji:$k4}), (k5:Kanji {kanji:$k5})-[:l5]->(w) RETURN DISTINCT w';
   let queryRes = await neoSession.run(query, {"k1":listKanji[0], "k2":listKanji[1], "k3":listKanji[2], "k4":listKanji[3], "k5":listKanji[4]});
-  return Array.from(queryRes.records, node => node.get("w"));
+  return Array.from(queryRes.records, node => node.get("w").properties);
 }
 
 module.exports = {

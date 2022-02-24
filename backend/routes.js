@@ -24,8 +24,8 @@ const routes = [
     handler: controller.getWord
   },
   {
-    method: 'GET',
-    url: '/getShopCombination/:id',
+    method: 'POST',
+    url: '/getShopCombination',
     handler: controller.getCountCombinationShop
   },
   {
@@ -34,8 +34,8 @@ const routes = [
     handler: controller.getTotalUse
   },
   {
-    method: 'GET',
-    url: '/getMerge/:id',
+    method: 'POST',
+    url: '/getMerge',
     handler: controller.getMerge
   }
 ]
