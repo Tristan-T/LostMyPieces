@@ -41,17 +41,20 @@ const getAllWords = async (req, reply) => {
 }
 
 /**
- * Returns one word and its properties
+ * Returns one word and its properties, as well as the variants and definitions
  *
  * @param {String} req.id The word to be retrieved
  * @return {JSON} Word object.
  */
 const getWord = async (req, reply) => {
   console.log('Word : ' + req.params.id);
-  const query = 'MATCH(w:Word {word:$id}) RETURN w'
+  const query = `MATCH (v:Variant)<-[:VARIANT*..]-(w:Word {word:$id})-[:DEFINITION*..]->(d:Definition)
+                 RETURN w {.*, definitions: collect(DISTINCT d.def), variants: collect(DISTINCT v {pronounced:v.pronounced, variant: v.variant})}
+                `
   let queryRes = await req.neoSession.run(query, req.params);
   reply.type("application/json");
-  return queryRes.records[0].get("w").properties;
+  return queryRes.records[0].get("w");
+  //return queryRes.records[0].get("w").properties;
 }
 
 /**
