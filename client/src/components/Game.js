@@ -3,20 +3,45 @@ import SidePanel from "./Game/SidePanel";
 import WhiteBoard from "./Game/WhiteBoard";
 import {getKanjisUnlocked} from "../services/api";
 import Loading from "./Loading";
+import configData from "../listKanjis.json"
 
 const Game = () => {
     const [initialized, setInitialized] = useState(false);
-
     const [kanjiList, setKanjiList] = useState({})
 
-    useEffect(() => {
-        getKanjisUnlocked(["一", "人", "日"])
+    const loadSidePanel = () => {
+        let kanjisUnlocked = localStorage.getItem("kanjisUnlocked");
+        if(kanjisUnlocked) {
+            console.log("Loading from localStorage")
+            setKanjiList(JSON.parse(kanjisUnlocked));
+            setInitialized(true);
+        } else {
+            getKanjisUnlocked(configData.defaultKanjis)
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Loading from API")
+                    localStorage.setItem("kanjisUnlocked", JSON.stringify(data))
+                    setKanjiList(data);
+                    setInitialized(true);
+                });
+        }
+    }
+
+    useEffect(loadSidePanel, [])
+
+    const unlockKanji = (kanji) => {
+        let newKanjiList = kanjiList.map(kanji => kanji.kanji);
+        newKanjiList.push(kanji);
+        console.log(newKanjiList)
+        getKanjisUnlocked(newKanjiList)
             .then(response => response.json())
             .then(data => {
+                localStorage.setItem("kanjisUnlocked", JSON.stringify(data))
+                console.log(data)
                 setKanjiList(data);
-                setInitialized(true);
-            })
-    }, []);
+            });
+    }
+
 
     const [kanjiOnBoard, setKanjiOnBoard] = useState([
         {kanji: "人", kun: "ひと", on: "ジン", english: "person", position: {x: 0.5, y: 0.5}}
