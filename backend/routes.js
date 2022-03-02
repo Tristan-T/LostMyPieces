@@ -37,6 +37,11 @@ const routes = [
     method: 'POST',
     url: '/getMerge',
     handler: controller.getMerge
+  },
+  {
+    method: 'POST',
+    url: '/getKanjisUnlocked',
+    handler: controller.getKanjisUnlocked
   }
 ]
 

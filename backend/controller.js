@@ -139,6 +139,23 @@ const getMerge = async (req, reply) => {
   }
 }
 
+const getKanjisUnlocked = async (req, reply) => {
+  console.log('Get count combination for unlocked kanjis with : ' + req.body);
+  const query = `WITH $listKanjis AS kanji_unlocked
+                 MATCH (excluded:Kanji)
+                 WHERE NOT excluded.kanji IN kanji_unlocked
+                 WITH collect(excluded) AS kanji_locked
+                 MATCH (k:Kanji)-->(w:Word)
+                 WITH kanji_locked, w, collect(k) AS kanjis
+                 WHERE NONE (k IN kanjis WHERE k IN kanji_locked)
+                 UNWIND kanjis AS kanjiList
+                 RETURN DISTINCT kanjiList, COUNT(DISTINCT w) AS nbCombinations
+                `
+  let queryRes = await req.neoSession.run(query, {"listKanjis":req.body});
+  reply.type("application/json");
+  return Array.from(queryRes.records, node => Object.assign(node.get("kanjiList").properties, {"nbCombinations":node.get("nbCombinations")}));
+}
+
 /**
  * Returns a list of words that can be unlocked from the characters passed. (empty if none)
  * The words can be made from any combination of kanjis, regardless of the order
@@ -202,5 +219,6 @@ module.exports = {
   getWord,
   getCountCombinationShop,
   getTotalUse,
-  getMerge
+  getMerge,
+  getKanjisUnlocked
 }
