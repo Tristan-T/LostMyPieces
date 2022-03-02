@@ -1,6 +1,6 @@
 const SidePanel = ({kanjiList, onNewKanjiOnWhiteBoard}) => {
     return (
-        <div className="SidePanel bg-gray-300 h-full w-full border-l-gray-500 border-l-thin">
+        <div className="SidePanel scroll-smooth snap-y bg-gray-300 h-full w-full border-l-gray-500 border-l-thin">
             <div className="SidePanelMenu border-b-thin border-b-gray-500 flex flex-row justify-between text-center chi">
                 <div className="w-full py-1 font-semibold">Sort by :</div>
                 <div className="cursor-pointer select-none w-full py-1 border-l-gray-500 border-l-thin hover:bg-gray-200 duration-150">Total use</div>
@@ -12,7 +12,7 @@ const SidePanel = ({kanjiList, onNewKanjiOnWhiteBoard}) => {
                     return (
                         <div 
                         key={v.kanji} 
-                        className="cursor-pointer py-3 px-2 border-b-thin border-b-gray-500 flex items-center select-none hover:bg-gray-200 duration-150"
+                        className="snap-start cursor-pointer py-1 px-2 border-b-thin border-b-gray-500 flex items-center select-none hover:bg-gray-200 duration-150"
                         draggable="true"
                         onDragStart={(event) => {
                             console.log(v);
