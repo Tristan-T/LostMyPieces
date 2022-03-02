@@ -1,13 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import SidePanel from "./Game/SidePanel";
 import WhiteBoard from "./Game/WhiteBoard";
-import {getKanjisUnlocked} from "../services/api";
+import {getKanjisUnlocked, getShopCombination} from "../services/api";
 import Loading from "./Loading";
+import ShopModal from "./Shop/ShopModal";
 import configData from "../listKanjis.json"
 
 const Game = () => {
     const [initialized, setInitialized] = useState(false);
-    const [kanjiList, setKanjiList] = useState({})
+    const [kanjiList, setKanjiList] = useState([])
+    const [kanjiListShop, setKanjiListShop] = useState([]);
+
+    const loadShop = () => {
+        if(kanjiList.length !== 0) {
+            let kanjisUnlocked = kanjiList.map(k=>k.kanji);
+            getShopCombination(kanjisUnlocked)
+                .then(response => response.json())
+                .then(data => {
+                    setKanjiListShop(data);
+                });
+        }
+    }
+
+    const updateShop = (kanjis) => {
+        getShopCombination(kanjis)
+            .then(response => response.json())
+            .then(data => {
+                setKanjiListShop(data);
+            });
+    }
 
     const loadSidePanel = () => {
         let kanjisUnlocked = localStorage.getItem("kanjisUnlocked");
@@ -28,16 +49,19 @@ const Game = () => {
     }
 
     useEffect(loadSidePanel, [])
+    useEffect(loadShop, [])
 
     const unlockKanji = (kanji) => {
+        //TODO : Prevent data loss from clicking on another button before setKanjiList is called
         let newKanjiList = kanjiList.map(kanji => kanji.kanji);
         newKanjiList.push(kanji);
-        console.log(newKanjiList)
+        kanjiList.push({kanji:kanji})
+        //Triggering the kanjiListShop update
+        updateShop(newKanjiList)
         getKanjisUnlocked(newKanjiList)
             .then(response => response.json())
             .then(data => {
                 localStorage.setItem("kanjisUnlocked", JSON.stringify(data))
-                console.log(data)
                 setKanjiList(data);
             });
     }
@@ -63,6 +87,11 @@ const Game = () => {
         setKanjiOnBoard(newKanjiOnBoard);
     }
 
+    const [showShop, setShowShop] = useState(false);
+    const openShop = () => {
+        setShowShop(prevState => !prevState);
+    }
+
     if (!initialized) {
         return <Loading />;
     }
@@ -75,6 +104,14 @@ const Game = () => {
             <div className="w-3/12 h-full">
                 <SidePanel kanjiList={kanjiList} onNewKanjiOnWhiteBoard={OnCreateNewKanjiOnBoard}/>
             </div>
+            <div className="ui absolute top-2 left-2 text-2xl" id="money">200</div>
+            <div className="ui absolute ui bottom-4 left-2 text-5xl gray">
+                <button onClick={openShop}>&#127978;</button>
+                <button>&#129529;</button>
+                <button>&#127384;</button>
+                <button>&#128202;</button>
+            </div>
+            <ShopModal showShop={showShop} setShowShop = {setShowShop} kanjiListShop={kanjiListShop} unlockKanjis={unlockKanji}/>
         </div>
     );
 }
