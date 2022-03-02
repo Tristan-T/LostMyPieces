@@ -1,17 +1,6 @@
-import { useState } from "react";
 import {Link} from "react-router-dom";
-import Loading from "./Loading";
 
 const MainMenu = () => {
-    const [initialized, setInitialized] = useState(false);
-
-    // simulate loading
-    setTimeout(() => setInitialized(true), 1000);
-
-    if (!initialized) {
-        return <Loading />;
-    }
-
     const path = [
         {name: "Mode normal", path: "/game", active: true},
         {name: "Mode rush", path: "/", active: false},

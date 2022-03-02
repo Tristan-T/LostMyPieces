@@ -1,13 +1,22 @@
-import React, { useState } from 'react';
-import SidePannel from "./Game/SidePannel";
+import React, { useState, useEffect } from 'react';
+import SidePanel from "./Game/SidePanel";
 import WhiteBoard from "./Game/WhiteBoard";
+import {getKanjisUnlocked} from "../services/api";
+import Loading from "./Loading";
 
 const Game = () => {
-    const [kanjiList] = useState([
-        {kanji: "人", kun: "ひと", on: "ジン", english: "person"},
-        {kanji: "一", kun: "ひと-", on: "イチ", english: "one"},
-        {kanji: "日", kun: "ひ", on: "ニチ", english: "day"}
-    ]);
+    const [initialized, setInitialized] = useState(false);
+
+    const [kanjiList, setKanjiList] = useState({})
+
+    useEffect(() => {
+        getKanjisUnlocked(["一", "人", "日"])
+            .then(response => response.json())
+            .then(data => {
+                setKanjiList(data);
+                setInitialized(true);
+            })
+    }, []);
 
     const [kanjiOnBoard, setKanjiOnBoard] = useState([
         {kanji: "人", kun: "ひと", on: "ジン", english: "person", position: {x: 0.5, y: 0.5}}
@@ -29,13 +38,17 @@ const Game = () => {
         setKanjiOnBoard(newKanjiOnBoard);
     }
 
+    if (!initialized) {
+        return <Loading />;
+    }
+
     return (
         <div className="Game h-screen w-screen flex">
             <div className="w-9/12 h-full">
                 <WhiteBoard kanjiOnBoard={kanjiOnBoard} onMerge={ OnMerge } onAdd={ (v) => {setKanjiOnBoard([...kanjiOnBoard, v])}} onDelete={(v) => {setKanjiOnBoard(kanjiOnBoard.filter(t => t !== v));}}/>
             </div>
             <div className="w-3/12 h-full">
-                <SidePannel kanjiList={kanjiList} onNewKanjiOnWhiteBoard={OnCreateNewKanjiOnBoard}/>
+                <SidePanel kanjiList={kanjiList} onNewKanjiOnWhiteBoard={OnCreateNewKanjiOnBoard}/>
             </div>
         </div>
     );
