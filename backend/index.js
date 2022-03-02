@@ -10,6 +10,9 @@ try {
 // Importing and instantiating Fastify
 const app = require('fastify')({logger: true})
 
+// Managing CORS policy
+app.register(require('fastify-cors', {}))
+
 /********************************************
               Connecting to neo4j
 *********************************************/
