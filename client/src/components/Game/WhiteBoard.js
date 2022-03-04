@@ -1,6 +1,8 @@
-import React, {useEffect, useRef} from 'react';
+import React, { useEffect, useRef } from 'react';
 
-const WhiteBoard = ({kanjiOnBoard, onMerge, onAdd, onDelete}) => {
+const WhiteBoard = ({ kanjiOnBoard, onMerge, onAdd, onDelete }) => {
+    const DEBUG = false;
+
     const canvasRef = useRef(null);
     let dragging = false;
 
@@ -72,7 +74,7 @@ const WhiteBoard = ({kanjiOnBoard, onMerge, onAdd, onDelete}) => {
      * @returns 
      */
     const getTextBound = (canvas, prop) => {
-        const {x, y} = prop.position;
+        const { x, y } = prop.position;
 
         const context = canvas.getContext('2d');
 
@@ -82,10 +84,10 @@ const WhiteBoard = ({kanjiOnBoard, onMerge, onAdd, onDelete}) => {
         const height = textSize.actualBoundingBoxAscent + textSize.actualBoundingBoxDescent;
 
         const bounds = {
-            minX : x * canvas.width - textSize.width / 2,
-            minY : y * canvas.height - height / 2,
-            maxX : x * canvas.width + textSize.width / 2,
-            maxY : y * canvas.height + height / 2,
+            minX: x * canvas.width - textSize.width / 2,
+            minY: y * canvas.height - height / 2,
+            maxX: x * canvas.width + textSize.width / 2,
+            maxY: y * canvas.height + height / 2,
         };
 
         return bounds;
@@ -97,20 +99,33 @@ const WhiteBoard = ({kanjiOnBoard, onMerge, onAdd, onDelete}) => {
      */
     const drawCanvas = (canvas) => {
         const _drawProp = (prop) => {
-            const {x, y} = prop.position;
+            const { x, y } = prop.position;
 
             context.strokeStyle = prop.hover ? "#FF0000" : "#00FF00";
-            context.font = '3em serif';
+            context.font = prop.clicked ? '3.7em serif' : '3em serif';
             context.textBaseline = 'middle';
             context.textAlign = "center";
 
             const bounds = getTextBound(canvas, prop);
 
-            context.strokeRect(
-                bounds.minX,
-                bounds.minY,
-                bounds.maxX - bounds.minX,
-                bounds.maxY - bounds.minY);
+            if (DEBUG) {
+                context.strokeRect(
+                    bounds.minX,
+                    bounds.minY,
+                    bounds.maxX - bounds.minX,
+                    bounds.maxY - bounds.minY);
+            }
+
+            if (prop.hover) {
+                context.fillStyle = "#dbdbdb";
+                context.fillRect(
+                    bounds.minX,
+                    bounds.minY,
+                    bounds.maxX - bounds.minX,
+                    bounds.maxY - bounds.minY
+                );
+            }
+            context.fillStyle = "#000000";
             context.fillText(prop.kanji, x * canvas.width, y * canvas.height);
         }
         canvas.width = canvas.offsetWidth;
@@ -144,7 +159,7 @@ const WhiteBoard = ({kanjiOnBoard, onMerge, onAdd, onDelete}) => {
             if (event.pageX < bounds.minX || event.pageY < bounds.minY || event.pageX > bounds.maxX || event.pageY > bounds.maxY)
                 return true;
 
-            onAdd({...v, position : {x : v.position.x + 0.005, y: v.position.y + 0.005}});
+            onAdd({ ...v, position: { x: v.position.x + 0.005, y: v.position.y + 0.005 } });
 
             hoverTest(event);
 
@@ -168,13 +183,14 @@ const WhiteBoard = ({kanjiOnBoard, onMerge, onAdd, onDelete}) => {
             if (event.pageX < bounds.minX || event.pageY < bounds.minY || event.pageX > bounds.maxX || event.pageY > bounds.maxY)
                 return true;
 
-            
-            
+
+
             if (event.button === 2) { // right click
                 onDelete(v);
             } else if (event.button === 0) { // left click
                 v.clicked = true;
-                dragging = true; 
+                v.hover = false;
+                dragging = true;
             }
 
             return false;
@@ -240,11 +256,11 @@ const WhiteBoard = ({kanjiOnBoard, onMerge, onAdd, onDelete}) => {
      */
     const OnDragOver = (event) => {
         event.preventDefault();
-        const kanji = JSON.parse(event.dataTransfer.getData("application/lost-my-pieces"));
+        /* const kanji = JSON.parse(event.dataTransfer.getData("application/lost-my-pieces")); */
 
         const [canvasX, canvasY] = [event.pageX / event.target.width, event.pageY / event.target.height];
 
-        tempProp = {...kanji, position: {x: canvasX, y: canvasY}};
+        tempProp = { kanji: "O", position: { x: canvasX, y: canvasY } };
 
         drawCanvas(event.target);
     };
@@ -264,7 +280,7 @@ const WhiteBoard = ({kanjiOnBoard, onMerge, onAdd, onDelete}) => {
         const kanji = JSON.parse(event.dataTransfer.getData("application/lost-my-pieces"));
         const [canvasX, canvasY] = [event.pageX / event.target.width, event.pageY / event.target.height];
 
-        const newProp = {...kanji, position: {x: canvasX, y: canvasY}};
+        const newProp = { ...kanji, position: { x: canvasX, y: canvasY } };
         onAdd(newProp);
 
         processOverlap(event.target, newProp);
@@ -272,22 +288,22 @@ const WhiteBoard = ({kanjiOnBoard, onMerge, onAdd, onDelete}) => {
 
     useEffect(CanvasInit);
 
-    return (<div className = 'WhiteBoard h-full w-full bg-gray-200'>
-            <canvas 
-                ref = {canvasRef} 
-                className = 'h-full w-full' 
-                onContextMenu={(e) => e.preventDefault()}
-                onDoubleClick = {OnDoubleClick}
-                onMouseDown = {OnMouseDown} 
-                onMouseMove = {OnMouseMove} 
-                onMouseUp = {OnMouseUp} 
-                onMouseLeave = {OnMouseUp}
-                onDragOver = {OnDragOver}
-                onDragExit = {OnDragExit}
-                onDrop = {OnDrop}
-            >
+    return (<div className='WhiteBoard h-full w-full bg-gray-200'>
+        <canvas
+            ref={canvasRef}
+            className='h-full w-full'
+            onContextMenu={(e) => e.preventDefault()}
+            onDoubleClick={OnDoubleClick}
+            onMouseDown={OnMouseDown}
+            onMouseMove={OnMouseMove}
+            onMouseUp={OnMouseUp}
+            onMouseLeave={OnMouseUp}
+            onDragOver={OnDragOver}
+            onDragExit={OnDragExit}
+            onDrop={OnDrop}
+        >
 
-            </canvas>
+        </canvas>
     </div>);
 }
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import SidePanel from "./Game/SidePanel";
 import WhiteBoard from "./Game/WhiteBoard";
-import {getKanjisUnlocked, getShopCombination} from "../services/api";
+import { getKanjisUnlocked, getShopCombination } from "../services/api";
 import Loading from "./Loading";
 import ShopModal from "./Shop/ShopModal";
 import configData from "../listKanjis.json"
@@ -10,10 +10,12 @@ const Game = () => {
     const [initialized, setInitialized] = useState(false);
     const [kanjiList, setKanjiList] = useState([])
     const [kanjiListShop, setKanjiListShop] = useState([]);
+    const [showShop, setShowShop] = useState(false);
+    const [money, setMoney] = useState(0);
 
     const loadShop = () => {
-        if(kanjiList.length !== 0) {
-            let kanjisUnlocked = kanjiList.map(k=>k.kanji);
+        if (kanjiList.length !== 0) {
+            let kanjisUnlocked = kanjiList.map(k => k.kanji);
             getShopCombination(kanjisUnlocked)
                 .then(response => response.json())
                 .then(data => {
@@ -32,7 +34,7 @@ const Game = () => {
 
     const loadSidePanel = () => {
         let kanjisUnlocked = localStorage.getItem("kanjisUnlocked");
-        if(kanjisUnlocked) {
+        if (kanjisUnlocked) {
             console.log("Loading from localStorage")
             setKanjiList(JSON.parse(kanjisUnlocked));
             setInitialized(true);
@@ -55,7 +57,7 @@ const Game = () => {
         //TODO : Prevent data loss from clicking on another button before setKanjiList is called
         let newKanjiList = kanjiList.map(kanji => kanji.kanji);
         newKanjiList.push(kanji);
-        kanjiList.push({kanji:kanji})
+        kanjiList.push({ kanji: kanji })
         //Triggering the kanjiListShop update
         updateShop(newKanjiList)
         getKanjisUnlocked(newKanjiList)
@@ -68,7 +70,7 @@ const Game = () => {
 
 
     const [kanjiOnBoard, setKanjiOnBoard] = useState([
-        {kanji: "人", kun: "ひと", on: "ジン", english: "person", position: {x: 0.5, y: 0.5}}
+        { kanji: "人", kun: "ひと", on: "ジン", english: "person", position: { x: 0.5, y: 0.5 } }
     ]);
 
     /**
@@ -76,20 +78,15 @@ const Game = () => {
      * @param {{kanji: string, kun: string, on: string, english: string}} kanji 
      */
     const OnCreateNewKanjiOnBoard = (kanji) => {
-        setKanjiOnBoard([...kanjiOnBoard, {...kanji, position: {x: 0.5, y: 0.5}}]);
+        setKanjiOnBoard([...kanjiOnBoard, { ...kanji, position: { x: 0.5, y: 0.5 } }]);
     }
 
     const OnMerge = (first, second) => {
         const newKanjiOnBoard = kanjiOnBoard.filter(v => v !== first && v !== second);
 
-        newKanjiOnBoard.push({kanji: first.kanji + second.kanji, position: first.position});
+        newKanjiOnBoard.push({ kanji: first.kanji + second.kanji, position: first.position });
 
         setKanjiOnBoard(newKanjiOnBoard);
-    }
-
-    const [showShop, setShowShop] = useState(false);
-    const openShop = () => {
-        setShowShop(prevState => !prevState);
     }
 
     if (!initialized) {
@@ -99,19 +96,19 @@ const Game = () => {
     return (
         <div className="Game h-screen w-screen flex">
             <div className="w-9/12 h-full">
-                <WhiteBoard kanjiOnBoard={kanjiOnBoard} onMerge={ OnMerge } onAdd={ (v) => {setKanjiOnBoard([...kanjiOnBoard, v])}} onDelete={(v) => {setKanjiOnBoard(kanjiOnBoard.filter(t => t !== v));}}/>
+                <WhiteBoard kanjiOnBoard={kanjiOnBoard} onMerge={OnMerge} onAdd={(v) => { setKanjiOnBoard([...kanjiOnBoard, v]) }} onDelete={(v) => { setKanjiOnBoard(kanjiOnBoard.filter(t => t !== v)); }} />
             </div>
             <div className="w-3/12 h-full">
-                <SidePanel kanjiList={kanjiList} onNewKanjiOnWhiteBoard={OnCreateNewKanjiOnBoard}/>
+                <SidePanel kanjiList={kanjiList} onNewKanjiOnWhiteBoard={OnCreateNewKanjiOnBoard} />
             </div>
-            <div className="ui absolute top-2 left-2 text-2xl" id="money">200</div>
+            <div className="ui absolute top-2 left-2 text-2xl" id="money">${money}</div>
             <div className="ui absolute ui bottom-4 left-2 text-5xl gray">
-                <button onClick={openShop}>&#127978;</button>
-                <button>&#129529;</button>
+                <button onClick={() => setShowShop(!showShop)}>&#127978;</button>
+                <button onClick={() => setKanjiOnBoard([])}>&#129529;</button>
                 <button>&#127384;</button>
                 <button>&#128202;</button>
             </div>
-            <ShopModal showShop={showShop} setShowShop = {setShowShop} kanjiListShop={kanjiListShop} unlockKanjis={unlockKanji}/>
+            <ShopModal showShop={showShop} setShowShop={setShowShop} kanjiListShop={kanjiListShop} unlockKanjis={unlockKanji} />
         </div>
     );
 }
