@@ -25,14 +25,12 @@ const driver = neo4j.driver(config.database.uri, neo4j.auth.basic(config.databas
   disableLosslessIntegers: true // Disable the low and high, the database does not work with big integers
 })
 
-const session = driver.session()
-
 // Passing the session object to each queries
 app.decorateRequest('neoSession', null)
 
 app.addHook('preHandler', async (req, reply) => {
   console.log("Pre-handler");
-  req.neoSession = session;
+  req.neoSession = driver.session();
 })
 
 const routes = require('./routes.js')
