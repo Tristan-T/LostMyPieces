@@ -45,8 +45,11 @@ const Game = () => {
         getShopCombination(kanjis)
             .then(response => response.json())
             .then(data => {
-                setKanjiListShop(data);
-                (document.getElementById("shop-modal")).style.pointerEvents = "auto";
+                console.log(data)
+                let result = [];
+                for(const k in data) result.push({kanji: k, uses:data[k]})
+                setKanjiListShop(result);
+                //(document.getElementById("shop-modal")).style.pointerEvents = "auto";
             });
     }
 
