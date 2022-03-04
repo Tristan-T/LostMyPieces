@@ -13,54 +13,27 @@ const Game = () => {
     const [showShop, setShowShop] = useState(false);
     const [money, setMoney] = useState(0);
 
-    const loadShop = () => {
-        if (kanjiList.length !== 0) {
-            let kanjisUnlocked = kanjiList.map(k => k.kanji);
-            getShopCombination(kanjisUnlocked)
-                .then(response => response.json())
-                .then(data => {
-                    setKanjiListShop(data);
-                });
-        }
-    }
-
-    const updateShop = (kanjis) => {
-        getShopCombination(kanjis)
-            .then(response => response.json())
-            .then(data => {
-                setKanjiListShop(data);
-            });
-    }
-
-    const loadSidePanel = () => {
+    const initUI = () => {
         let kanjisUnlocked = localStorage.getItem("kanjisUnlocked");
         if (kanjisUnlocked) {
             console.log("Loading from localStorage")
             setKanjiList(JSON.parse(kanjisUnlocked));
             setInitialized(true);
         } else {
+            console.log("Loading from API")
             getKanjisUnlocked(configData.defaultKanjis)
                 .then(response => response.json())
                 .then(data => {
-                    console.log("Loading from API")
                     localStorage.setItem("kanjisUnlocked", JSON.stringify(data))
                     setKanjiList(data);
                     setInitialized(true);
                 });
         }
+        updateShop(configData.defaultKanjis);
     }
 
-    useEffect(loadSidePanel, [])
-    useEffect(loadShop, [])
-
-    const unlockKanji = (kanji) => {
-        //TODO : Prevent data loss from clicking on another button before setKanjiList is called
-        let newKanjiList = kanjiList.map(kanji => kanji.kanji);
-        newKanjiList.push(kanji);
-        kanjiList.push({ kanji: kanji })
-        //Triggering the kanjiListShop update
-        updateShop(newKanjiList)
-        getKanjisUnlocked(newKanjiList)
+    const updateSidePanel = (kanjis) => {
+        getKanjisUnlocked(kanjis)
             .then(response => response.json())
             .then(data => {
                 localStorage.setItem("kanjisUnlocked", JSON.stringify(data))
@@ -68,6 +41,23 @@ const Game = () => {
             });
     }
 
+    const updateShop = (kanjis) => {
+        getShopCombination(kanjis)
+            .then(response => response.json())
+            .then(data => {
+                setKanjiListShop(data);
+                (document.getElementById("shop-modal")).style.pointerEvents = "auto";
+            });
+    }
+
+    const unlockKanji = (kanji) => {
+        let newKanjiList = kanjiList.map(kanji => kanji.kanji);
+        newKanjiList.push(kanji);
+        updateSidePanel(newKanjiList)
+        updateShop(newKanjiList)
+    }
+
+    useEffect(initUI, [])
 
     const [kanjiOnBoard, setKanjiOnBoard] = useState([
         { kanji: "人", kun: "ひと", on: "ジン", english: "person", position: { x: 0.5, y: 0.5 } }

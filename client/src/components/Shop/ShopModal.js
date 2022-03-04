@@ -1,13 +1,12 @@
 import React from "react";
 
 const ShopModal = ({showShop, kanjiListShop, unlockKanjis}) => {
-    console.log(kanjiListShop)
     let result = [];
     for(const k in kanjiListShop) result.push({kanji: k, uses:kanjiListShop[k]})
     console.log(result)
     return <>{showShop ? (
         <div
-            className="overflow-y-scroll absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 border-black border-thin rounded p-2 bg-gray-200 grid grid-cols-5 gap-3 place-items-center w-4/5 h-3/4">
+            id="shop-modal" className="overflow-y-scroll absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 border-black border-thin rounded p-2 bg-gray-200 grid grid-cols-5 gap-3 place-items-center w-4/5 h-3/4">
             {
                 result.map((v) => {
                     return (
@@ -15,7 +14,7 @@ const ShopModal = ({showShop, kanjiListShop, unlockKanjis}) => {
                             key={v.kanji}
                             className="border-black border-thin cursor-pointer select-none hover:bg-gray-200 duration-150 w-5/6"
                             onClick={(event) => {
-                                console.log(v.kanji);
+                                (document.getElementById("shop-modal")).style.pointerEvents = "none";
                                 unlockKanjis(v.kanji);
                             }
                         }>
