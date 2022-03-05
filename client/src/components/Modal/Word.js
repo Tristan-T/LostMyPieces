@@ -3,7 +3,7 @@ import React from "react";
 const Word = ({word}) => {
     return (
     <div>
-        {word.reading}
+        {word.word}
     </div>)
 }
 

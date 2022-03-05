@@ -23,7 +23,7 @@ const SidePanel = ({ kanjiList, onNewKanjiOnWhiteBoard }) => {
                             <div className="flex flex-col">
                                 <div className="text-xs text-gray-700">{v.kun_readings[0]}</div>
                                 <div className="text-5xl text-black my-2">{v.kanji}</div>
-                                <div className="text-xs text-gray-600">0/{v.nbCombinations}</div>
+                                <div className="text-xs text-gray-600">{v.foundCombinations}/{v.nbCombinations}</div>
                             </div>
 
                             <div className="mx-auto capitalize text-2xl">

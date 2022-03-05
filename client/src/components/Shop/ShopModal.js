@@ -5,7 +5,7 @@ import ShopTile from "./ShopTile";
 import "./shopStyle.css"
 import OutsideClickHandler from "react-outside-click-handler";
 
-const ShopModal = ({showShop, setShowShop, kanjiListShop, unlockKanjis, canBuy}) => {
+const ShopModal = ({showShop, setShowShop, kanjiListShop, unlockKanjis, canBuy, money, setMoney}) => {
     return <>{showShop ? (
         <OutsideClickHandler onOutsideClick={() => {
                 setShowShop(false);
@@ -18,7 +18,7 @@ const ShopModal = ({showShop, setShowShop, kanjiListShop, unlockKanjis, canBuy})
                 style={{pointerEvents: canBuy ? 'auto' : 'none'}}
                 >{kanjiListShop.map((v) => v.uses!==0?(
                         <CSSTransition key={v.kanji} timeout={200} classNames="item">
-                            <ShopTile kanji={v} unlockKanjis={unlockKanjis}/>
+                            <ShopTile kanji={v} unlockKanjis={unlockKanjis} money={money} setMoney={setMoney}/>
                         </CSSTransition>
                     ):null)}
             </TransitionGroup>

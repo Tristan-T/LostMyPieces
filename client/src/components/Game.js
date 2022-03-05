@@ -14,14 +14,11 @@ const Game = () => {
     const [kanjiList, setKanjiList] = useState([])
     const [kanjiListShop, setKanjiListShop] = useState([]);
     const [showShop, setShowShop] = useState(false);
-    const [money, setMoney] = useState(0);
+    const [money, setMoney] = useState(localStorage.getItem("money")?JSON.parse(localStorage.getItem("money")):0);
     const [canBuy, setCanBuy] = useState(true);
     const [UIDisabled, setUIDisabled] = useState(false);
-    const [modalList, setModalList] = useState([
-        {type:"word", word:{reading:"MOT_A"}},
-        {type:"word", word:{reading:"MOT_B"}},
-        {type:"kanji", kanji:{kanji:"K"}},
-    ])
+    const [modalList, setModalList] = useState([])
+    const [unlockedWords, setUnlockedWords] = useState(localStorage.getItem("unlockedWords")?JSON.parse(localStorage.getItem("unlockedWords")):[])
 
     const initUI = () => {
         let kanjisUnlocked = localStorage.getItem("kanjisUnlocked");
@@ -35,8 +32,10 @@ const Game = () => {
             getKanjisUnlocked(configData.defaultKanjis)
                 .then(response => response.json())
                 .then(data => {
-                    localStorage.setItem("kanjisUnlocked", JSON.stringify(data))
-                    setKanjiList(data);
+                    const tempList = data.map(k => ({...k, foundCombinations:0}))
+                    console.log(tempList)
+                    localStorage.setItem("kanjisUnlocked", JSON.stringify(tempList))
+                    setKanjiList(tempList);
                     setInitialized(true);
                     updateShop(configData.defaultKanjis);
                 });
@@ -48,6 +47,10 @@ const Game = () => {
         getKanjisUnlocked(kanjis)
             .then(response => response.json())
             .then(data => {
+                console.log(data);
+                //TODO : Pas opti, double recherche dans une liste
+                data = data.map(kanji => ({...kanji, foundCombinations:kanjiList.findIndex(k => k.kanji===kanji.kanji)===-1?0:kanjiList.find(k => k.kanji===kanji.kanji).foundCombinations}))
+                console.log(data);
                 localStorage.setItem("kanjisUnlocked", JSON.stringify(data))
                 setKanjiList(data);
             });
@@ -99,11 +102,49 @@ const Game = () => {
                     console.log("No merge candidates");
                 } else {
                     //TODO : Using actualWord instead of word
-                    data.forEach(w => newKanjiOnBoard.push({kanji : w.word, position:first.position}))
+                    data.forEach(w => {
+                        newKanjiOnBoard.push({kanji : w.word, position:first.position});
+                        registerWord(w);
+                    })
                     setKanjiOnBoard(newKanjiOnBoard);
+                    localStorage.setItem("kanjisUnlocked", JSON.stringify(kanjiList))
                 }
             })
     }
+
+    const registerWord = (word) => {
+        let index = unlockedWords.findIndex(w => w.word===word.word);
+        if(index===-1) {
+            setUnlockedWords([...unlockedWords, {...word, tried:1}]);
+            const arrKanji = [...new Set(word.word.split(''))];
+            arrKanji.forEach(k => {
+                console.log(k)
+                let index = kanjiList.findIndex(kanji => kanji.kanji===k);
+                kanjiList[index].foundCombinations++;
+            })
+            setMoney(money+50);
+            openWordModal(word);
+        } else {
+            unlockedWords[index].tried++;
+            setUnlockedWords(unlockedWords);
+        }
+    }
+
+    const saveUnlockedWords = () => {
+        localStorage.setItem("unlockedWords", JSON.stringify(unlockedWords));
+    }
+
+    const saveMoney = () => {
+        localStorage.setItem("money", JSON.stringify(money));
+    }
+
+    const openWordModal = (word) => {
+        setModalList(modalList => [...modalList, {type:"word", word:word}])
+        console.log(modalList)
+    }
+
+    useEffect(saveUnlockedWords, [unlockedWords]);
+    useEffect(saveMoney, [money]);
 
     const toggleUI = () => {
         setUIDisabled(showShop || modalList.length!==0)
@@ -121,7 +162,7 @@ const Game = () => {
         switch (modal.type) {
             case 'word':
                 return <ModalWord
-                    key={modal.word.reading}
+                    key={modal.word.word}
                     word={modal.word}
                     closeLastModal={closeLastModal}
                 />;
@@ -155,7 +196,7 @@ const Game = () => {
                 <button>&#127384;</button>
                 <button>&#128202;</button>
             </div>
-            <ShopModal showShop={showShop} setShowShop={setShowShop} kanjiListShop={kanjiListShop} unlockKanjis={unlockKanji} canBuy={canBuy}/>
+            <ShopModal showShop={showShop} setShowShop={setShowShop} kanjiListShop={kanjiListShop} unlockKanjis={unlockKanji} canBuy={canBuy} money={money} setMoney={setMoney}/>
             {getModal()}
         </div>
     );
