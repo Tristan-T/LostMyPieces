@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import SidePanel from "./Game/SidePanel";
 import WhiteBoard from "./Game/WhiteBoard";
-import { getKanjisUnlocked, getShopCombination } from "../services/api";
+import { getKanjisUnlocked, getShopCombination, getMerge } from "../services/api";
 import Loading from "./Loading";
 import ShopModal from "./Shop/ShopModal";
 import configData from "../listKanjis.json"
@@ -78,10 +78,18 @@ const Game = () => {
 
     const OnMerge = (first, second) => {
         const newKanjiOnBoard = kanjiOnBoard.filter(v => v !== first && v !== second);
-
-        newKanjiOnBoard.push({ kanji: first.kanji + second.kanji, position: first.position });
-
-        setKanjiOnBoard(newKanjiOnBoard);
+        getMerge([first.kanji, second.kanji])
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                if(data.length===0) {
+                    console.log("No merge candidates");
+                } else {
+                    //TODO : Using actualWord instead of word
+                    data.forEach(w => newKanjiOnBoard.push({kanji : w.word, position:first.position}))
+                    setKanjiOnBoard(newKanjiOnBoard);
+                }
+            })
     }
 
     if (!initialized) {
