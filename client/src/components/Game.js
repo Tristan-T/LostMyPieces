@@ -12,12 +12,14 @@ const Game = () => {
     const [kanjiListShop, setKanjiListShop] = useState([]);
     const [showShop, setShowShop] = useState(false);
     const [money, setMoney] = useState(0);
+    const [canBuy, setCanBuy] = useState(true);
 
     const initUI = () => {
         let kanjisUnlocked = localStorage.getItem("kanjisUnlocked");
         if (kanjisUnlocked) {
             console.log("Loading from localStorage")
             setKanjiList(JSON.parse(kanjisUnlocked));
+            updateShop(JSON.parse(kanjisUnlocked).map(k => k.kanji));
             setInitialized(true);
         } else {
             console.log("Loading from API")
@@ -27,9 +29,10 @@ const Game = () => {
                     localStorage.setItem("kanjisUnlocked", JSON.stringify(data))
                     setKanjiList(data);
                     setInitialized(true);
+                    updateShop(configData.defaultKanjis);
                 });
         }
-        updateShop(configData.defaultKanjis);
+
     }
 
     const updateSidePanel = (kanjis) => {
@@ -42,14 +45,13 @@ const Game = () => {
     }
 
     const updateShop = (kanjis) => {
+        setCanBuy(false);
         getShopCombination(kanjis)
             .then(response => response.json())
             .then(data => {
                 console.log(data)
-                let result = [];
-                for(const k in data) result.push({kanji: k, uses:data[k]})
-                setKanjiListShop(result);
-                //(document.getElementById("shop-modal")).style.pointerEvents = "auto";
+                setKanjiListShop(data);
+                setCanBuy(true);
             });
     }
 
@@ -101,7 +103,7 @@ const Game = () => {
                 <button>&#127384;</button>
                 <button>&#128202;</button>
             </div>
-            <ShopModal showShop={showShop} setShowShop={setShowShop} kanjiListShop={kanjiListShop} unlockKanjis={unlockKanji} />
+            <ShopModal showShop={showShop} setShowShop={setShowShop} kanjiListShop={kanjiListShop} unlockKanjis={unlockKanji} canBuy={canBuy}/>
         </div>
     );
 }
