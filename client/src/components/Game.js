@@ -64,9 +64,13 @@ const Game = () => {
 
     useEffect(initUI, [])
 
-    const [kanjiOnBoard, setKanjiOnBoard] = useState([
-        { kanji: "人", kun: "ひと", on: "ジン", english: "person", position: { x: 0.5, y: 0.5 } }
-    ]);
+    const [kanjiOnBoard, setKanjiOnBoard] = useState(localStorage.getItem("kanjiOnBoard")?JSON.parse(localStorage.getItem("kanjiOnBoard")):[]);
+
+    const saveKanjiOnBoard = () => {
+        localStorage.setItem("kanjiOnBoard", JSON.stringify(kanjiOnBoard));
+    }
+
+    useEffect(saveKanjiOnBoard, [kanjiOnBoard])
 
     /**
      * 
