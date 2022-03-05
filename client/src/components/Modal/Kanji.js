@@ -1,9 +1,9 @@
 import React from "react";
 
-const Kanji = () => {
+const Kanji = ({kanji}) => {
     return (
         <div>
-            KANJI
+            {kanji.kanji}
         </div>)
 }
 

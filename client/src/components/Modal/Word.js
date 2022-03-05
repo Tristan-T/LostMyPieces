@@ -1,9 +1,9 @@
 import React from "react";
 
-const Word = () => {
+const Word = ({word}) => {
     return (
     <div>
-        WORD
+        {word.reading}
     </div>)
 }
 

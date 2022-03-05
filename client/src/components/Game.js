@@ -7,6 +7,7 @@ import ShopModal from "./Shop/ShopModal";
 import configData from "../listKanjis.json"
 import ModalWord from "./Modal/ModalWord";
 import ModalKanji from "./Modal/ModalKanji";
+import modal from "./Modal/Modal";
 
 const Game = () => {
     const [initialized, setInitialized] = useState(false);
@@ -105,10 +106,10 @@ const Game = () => {
     }
 
     const toggleUI = () => {
-        setUIDisabled(showShop)
+        setUIDisabled(showShop || modalList.length!==0)
     }
 
-    useEffect(toggleUI, [showShop])
+    useEffect(toggleUI, [showShop, modalList])
 
     const closeLastModal = () => {
         setModalList(modalList.slice(0, -1));
