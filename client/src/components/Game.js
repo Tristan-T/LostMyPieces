@@ -13,6 +13,7 @@ const Game = () => {
     const [showShop, setShowShop] = useState(false);
     const [money, setMoney] = useState(0);
     const [canBuy, setCanBuy] = useState(true);
+    const [UIDisabled, setUIDisabled] = useState(false);
 
     const initUI = () => {
         let kanjisUnlocked = localStorage.getItem("kanjisUnlocked");
@@ -96,20 +97,26 @@ const Game = () => {
             })
     }
 
+    const toggleUI = () => {
+        setUIDisabled(showShop)
+    }
+
+    useEffect(toggleUI, [showShop])
+
     if (!initialized) {
         return <Loading />;
     }
 
     return (
         <div className="Game h-screen w-screen flex">
-            <div className="w-9/12 h-full">
+            <div className="w-9/12 h-full" style={{pointerEvents:UIDisabled?"none":"auto"}}>
                 <WhiteBoard kanjiOnBoard={kanjiOnBoard} onMerge={OnMerge} onAdd={(v) => { setKanjiOnBoard([...kanjiOnBoard, v]) }} onDelete={(v) => { setKanjiOnBoard(kanjiOnBoard.filter(t => t !== v)); }} />
             </div>
-            <div className="w-3/12 h-full">
+            <div className="w-3/12 h-full" style={{pointerEvents:UIDisabled?"none":"auto"}}>
                 <SidePanel kanjiList={kanjiList} onNewKanjiOnWhiteBoard={OnCreateNewKanjiOnBoard} />
             </div>
-            <div className="ui absolute top-2 left-2 text-2xl" id="money">${money}</div>
-            <div className="ui absolute ui bottom-4 left-2 text-5xl gray">
+            <div className="ui absolute top-2 left-2 text-2xl" id="money" style={{pointerEvents:UIDisabled?"none":"auto"}}>${money}</div>
+            <div className="ui absolute ui bottom-4 left-2 text-5xl gray" style={{pointerEvents:UIDisabled?"none":"auto"}}>
                 <button onClick={() => setShowShop(!showShop)}>&#127978;</button>
                 <button onClick={() => setKanjiOnBoard([])}>&#129529;</button>
                 <button>&#127384;</button>
