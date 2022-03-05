@@ -5,6 +5,8 @@ import { getKanjisUnlocked, getShopCombination, getMerge } from "../services/api
 import Loading from "./Loading";
 import ShopModal from "./Shop/ShopModal";
 import configData from "../listKanjis.json"
+import ModalWord from "./Modal/ModalWord";
+import ModalKanji from "./Modal/ModalKanji";
 
 const Game = () => {
     const [initialized, setInitialized] = useState(false);
@@ -14,6 +16,11 @@ const Game = () => {
     const [money, setMoney] = useState(0);
     const [canBuy, setCanBuy] = useState(true);
     const [UIDisabled, setUIDisabled] = useState(false);
+    const [modalList, setModalList] = useState([
+        {type:"word", word:{reading:"MOT_A"}},
+        {type:"word", word:{reading:"MOT_B"}},
+        {type:"kanji", kanji:{kanji:"K"}},
+    ])
 
     const initUI = () => {
         let kanjisUnlocked = localStorage.getItem("kanjisUnlocked");
@@ -103,6 +110,31 @@ const Game = () => {
 
     useEffect(toggleUI, [showShop])
 
+    const closeLastModal = () => {
+        setModalList(modalList.slice(0, -1));
+    }
+
+    const getModal = () => {
+        if(modalList.length===0) return null;
+        let modal = modalList[modalList.length-1];
+        switch (modal.type) {
+            case 'word':
+                return <ModalWord
+                    key={modal.word.reading}
+                    word={modal.word}
+                    closeLastModal={closeLastModal}
+                />;
+            case 'kanji':
+                return <ModalKanji
+                    key={modal.kanji.kanji}
+                    kanji={modal.kanji}
+                    closeLastModal={closeLastModal}
+                />;
+            default:
+                return null;
+        }
+    }
+
     if (!initialized) {
         return <Loading />;
     }
@@ -123,6 +155,7 @@ const Game = () => {
                 <button>&#128202;</button>
             </div>
             <ShopModal showShop={showShop} setShowShop={setShowShop} kanjiListShop={kanjiListShop} unlockKanjis={unlockKanji} canBuy={canBuy}/>
+            {getModal()}
         </div>
     );
 }
