@@ -102,9 +102,11 @@ const Game = () => {
                     console.log("No merge candidates");
                 } else {
                     //TODO : Using actualWord instead of word
+					let i = 0;
                     data.forEach(w => {
-                        newKanjiOnBoard.push({kanji : w.word, position:first.position});
+                        newKanjiOnBoard.push({kanji : w.word, position:{x:first.position.x+i, y:first.position.y+i}});
                         registerWord(w);
+						
                     })
                     setKanjiOnBoard(newKanjiOnBoard);
                     localStorage.setItem("kanjisUnlocked", JSON.stringify(kanjiList))
