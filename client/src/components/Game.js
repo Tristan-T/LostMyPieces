@@ -104,9 +104,10 @@ const Game = () => {
                     //TODO : Using actualWord instead of word
 					let i = 0;
                     data.forEach(w => {
+                        //TODO : Can land out of bounds
                         newKanjiOnBoard.push({kanji : w.word, position:{x:first.position.x+i, y:first.position.y+i}});
                         registerWord(w);
-						
+						i+=0.05;
                     })
                     setKanjiOnBoard(newKanjiOnBoard);
                     localStorage.setItem("kanjisUnlocked", JSON.stringify(kanjiList))
