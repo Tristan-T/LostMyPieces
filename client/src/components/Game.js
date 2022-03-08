@@ -145,6 +145,11 @@ const Game = () => {
         console.log(modalList)
     }
 
+    const openKanjiModal = (kanji) => {
+        setModalList(modalList => [...modalList, {type:"kanji", kanji:kanji}])
+        console.log(modalList)
+    }
+
     useEffect(saveUnlockedWords, [unlockedWords]);
     useEffect(saveMoney, [money]);
 
@@ -189,7 +194,7 @@ const Game = () => {
                 <WhiteBoard kanjiOnBoard={kanjiOnBoard} onMerge={OnMerge} onAdd={(v) => { setKanjiOnBoard([...kanjiOnBoard, v]) }} onDelete={(v) => { setKanjiOnBoard(kanjiOnBoard.filter(t => t !== v)); }} />
             </div>
             <div className="w-3/12 h-full" style={{pointerEvents:UIDisabled?"none":"auto"}}>
-                <SidePanel kanjiList={kanjiList} onNewKanjiOnWhiteBoard={OnCreateNewKanjiOnBoard} />
+                <SidePanel kanjiList={kanjiList} openKanjiModal={openKanjiModal} />
             </div>
             <div className="ui absolute top-2 left-2 text-2xl" id="money" style={{pointerEvents:UIDisabled?"none":"auto"}}>${money}</div>
             <div className="ui absolute ui bottom-4 left-2 text-5xl gray" style={{pointerEvents:UIDisabled?"none":"auto"}}>

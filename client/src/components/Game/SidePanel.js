@@ -1,4 +1,4 @@
-const SidePanel = ({ kanjiList, onNewKanjiOnWhiteBoard }) => {
+const SidePanel = ({ kanjiList, openKanjiModal }) => {
     return (
         <div className="SidePanel scroll-smooth snap-y bg-gray-300 h-full w-full border-l-gray-500 border-l-thin">
             <div className="snap-start SidePanelMenu border-b-thin border-b-gray-500 flex flex-row justify-between text-center chi">
@@ -14,6 +14,7 @@ const SidePanel = ({ kanjiList, onNewKanjiOnWhiteBoard }) => {
                             key={v.kanji}
                             className="snap-start cursor-pointer py-1 px-2 border-b-thin border-b-gray-500 flex items-center select-none hover:bg-gray-200 duration-150"
                             draggable="true"
+                            onClick={() => {openKanjiModal(v)}}
                             onDragStart={(event) => {
                                 const image = new Image();
                                 event.dataTransfer.setData("application/lost-my-pieces", JSON.stringify(v || {}));
