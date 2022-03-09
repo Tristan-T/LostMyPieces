@@ -10,7 +10,6 @@ const ShopTile = ({kanji, unlockKanjis, money, setMoney}) => {
                     unlockKanjis(kanji.kanji);
                     setMoney(money-50);
                 }
-
         }}>
             <div className="font-bold text-4xl">{kanji.kanji}</div>
             <div className="text-xl">{kanji.english.charAt(0).toUpperCase() + kanji.english.slice(1)}</div>

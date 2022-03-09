@@ -1,5 +1,4 @@
 import React from "react";
-import {useState} from "react";
 import { CSSTransition, TransitionGroup } from "react-transition-group"
 import ShopTile from "./ShopTile";
 import "./shopStyle.css"
