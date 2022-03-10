@@ -1,7 +1,6 @@
 import React from "react";
 
 const Kanji = ({kanji}) => {
-    console.log(kanji)
     return (
         <div>
             <h1 className="text-5xl">{kanji.kanji}</h1>

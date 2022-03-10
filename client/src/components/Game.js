@@ -1,31 +1,59 @@
 import React, { useState, useEffect } from 'react';
+import OutsideClickHandler from "react-outside-click-handler";
+
 import SidePanel from "./Game/SidePanel";
 import WhiteBoard from "./Game/WhiteBoard";
-import { getKanjisUnlocked, getShopCombination, getMerge } from "../services/api";
 import Loading from "./Loading";
+import ModalManager from "./Modal/ModalManager";
 import ShopModal from "./Shop/ShopModal";
+
+import { getKanjisUnlocked, getMerge } from "../services/api";
+
 import configData from "../listKanjis.json"
-import ModalWord from "./Modal/ModalWord";
-import ModalKanji from "./Modal/ModalKanji";
-import modal from "./Modal/Modal";
 
 const Game = () => {
     const [initialized, setInitialized] = useState(false);
-    const [kanjiList, setKanjiList] = useState([])
-    const [kanjiListShop, setKanjiListShop] = useState([]);
-    const [showShop, setShowShop] = useState(false);
+    const [kanjiList, setKanjiList] = useState([]);
+    const [kanjiOnBoard, setKanjiOnBoard] = useState(localStorage.getItem("kanjiOnBoard")?JSON.parse(localStorage.getItem("kanjiOnBoard")):[]);
     const [money, setMoney] = useState(localStorage.getItem("money")?JSON.parse(localStorage.getItem("money")):0);
-    const [canBuy, setCanBuy] = useState(true);
     const [UIDisabled, setUIDisabled] = useState(false);
-    const [modalList, setModalList] = useState([])
+    const [showShop, setShowShop] = useState(false);
     const [unlockedWords, setUnlockedWords] = useState(localStorage.getItem("unlockedWords")?JSON.parse(localStorage.getItem("unlockedWords")):[])
+    const [modalList, setModalList] = useState([])
 
+    /**
+     * A kanji (one single japanese ideogram)
+     * @typedef Kanji
+     * @property {string} kanji - the kanji represented, length 1.
+     * @property {string} meaning - The most common english meaning of the kanji.
+     * @property {string[]} on_readings - An array of the on readings of the kanji.
+     * @property {string[]} romaji_on - The latin version of the on_readings.
+     * @property {string[]} kun_readings - An array of the kun readings of the kanji.
+     * @property {string[]} romaji_kun - The latin version of kun_readings.
+     * @property {number} strokeCount - Number of stroke to write the kanji.
+     * @property {number} nbCombinations - Total number of words the kanji is used in relative to the other unlocked kanjis.
+     * @property {number} foundCombinations - Uses found currently by the player.
+     * @property {link} strokeGif - The link to a gif of how to wrote the kanji.
+     * @property {position} [position] - The x and y position of the kanji on board.
+     */
+
+    /**
+     * A word made up of kanjis
+     * @typedef Word
+     * @property {string} word - The kana less version of the word, for easy merging.
+     * @property {string} actualWord - The real way of writing the word, for display.
+     * @property {string} trueReading - The word written in kanas for pronunciation.
+     * @property {string[]} priorities - The lists in which the word appears often (potentially empty)
+     */
+
+    /**
+     * Initialize the loading of the UI by either fetching data from the database or the localStorage
+     */
     const initUI = () => {
         let kanjisUnlocked = localStorage.getItem("kanjisUnlocked");
         if (kanjisUnlocked) {
             console.log("Loading from localStorage")
             setKanjiList(JSON.parse(kanjisUnlocked));
-            updateShop(JSON.parse(kanjisUnlocked).map(k => k.kanji));
             setInitialized(true);
         } else {
             console.log("Loading from API")
@@ -33,72 +61,42 @@ const Game = () => {
                 .then(response => response.json())
                 .then(data => {
                     const tempList = data.map(k => ({...k, foundCombinations:0}))
-                    console.log(tempList)
                     localStorage.setItem("kanjisUnlocked", JSON.stringify(tempList))
                     setKanjiList(tempList);
                     setInitialized(true);
-                    updateShop(configData.defaultKanjis);
                 });
         }
-
     }
 
+    useEffect(initUI, [])
+
+    /**
+     * Update the side panel when a new kanji is bought
+     * @param {Kanji[]} kanjis - an array of the unlocked kanji as a character
+     */
     const updateSidePanel = (kanjis) => {
         getKanjisUnlocked(kanjis)
             .then(response => response.json())
             .then(data => {
-                console.log(data);
                 //TODO : Pas opti, double recherche dans une liste
                 data = data.map(kanji => ({...kanji, foundCombinations:kanjiList.findIndex(k => k.kanji===kanji.kanji)===-1?0:kanjiList.find(k => k.kanji===kanji.kanji).foundCombinations}))
-                console.log(data);
                 localStorage.setItem("kanjisUnlocked", JSON.stringify(data))
                 setKanjiList(data);
             });
     }
 
-    const updateShop = (kanjis) => {
-        setCanBuy(false);
-        getShopCombination(kanjis)
-            .then(response => response.json())
-            .then(data => {
-                console.log(data)
-                setKanjiListShop(data);
-                setCanBuy(true);
-            });
-    }
-
-    const unlockKanji = (kanji) => {
-        let newKanjiList = kanjiList.map(kanji => kanji.kanji);
-        newKanjiList.push(kanji);
-        updateSidePanel(newKanjiList)
-        updateShop(newKanjiList)
-    }
-
-    useEffect(initUI, [])
-
-    const [kanjiOnBoard, setKanjiOnBoard] = useState(localStorage.getItem("kanjiOnBoard")?JSON.parse(localStorage.getItem("kanjiOnBoard")):[]);
-
-    const saveKanjiOnBoard = () => {
-        localStorage.setItem("kanjiOnBoard", JSON.stringify(kanjiOnBoard));
-    }
-
-    useEffect(saveKanjiOnBoard, [kanjiOnBoard])
-
     /**
-     * 
-     * @param {{kanji: string, kun: string, on: string, english: string}} kanji 
+     * Check if two kanjis are mergeable and add them on the board
+     * @param first - represent the Word or Kanji to be merged
+     * @param second - represent the Word or Kanji to be merged
      */
-    const OnCreateNewKanjiOnBoard = (kanji) => {
-        setKanjiOnBoard([...kanjiOnBoard, { ...kanji, position: { x: 0.5, y: 0.5 } }]);
-    }
-
     const OnMerge = (first, second) => {
         const newKanjiOnBoard = kanjiOnBoard.filter(v => v !== first && v !== second);
         getMerge([first.kanji, second.kanji])
             .then(response => response.json())
             .then(data => {
-                console.log(data);
                 if(data.length===0) {
+                    //TODO : Visual indication for unmergeable
                     console.log("No merge candidates");
                 } else {
                     //TODO : Using actualWord instead of word
@@ -115,13 +113,16 @@ const Game = () => {
             })
     }
 
+    /**
+     * Check if a word is new and accordingly adjust money, as well as updating the unlockedWords array
+     * @param word - the word to be tested
+     */
     const registerWord = (word) => {
         let index = unlockedWords.findIndex(w => w.word===word.word);
         if(index===-1) {
             setUnlockedWords([...unlockedWords, {...word, tried:1}]);
             const arrKanji = [...new Set(word.word.split(''))];
             arrKanji.forEach(k => {
-                console.log(k)
                 let index = kanjiList.findIndex(kanji => kanji.kanji===k);
                 kanjiList[index].foundCombinations++;
             })
@@ -133,57 +134,72 @@ const Game = () => {
         }
     }
 
+    /*
+    * handling modals
+     */
+
+    /**
+     * Open a word modal
+     * @param word
+     */
+    const openWordModal = (word) => {
+        setModalList(modalList => [...modalList, {type:"word", word:word}])
+    }
+
+    /**
+     * Open a kanji modal
+     * @param kanji
+     */
+    const openKanjiModal = (kanji) => {
+        console.log(kanji)
+        setModalList(modalList => [...modalList, {type:"kanji", kanji:kanji}])
+    }
+
+    /*
+    * auto-save features
+     */
+
+    /**
+     * Save in LocalStorage the kanjis appearing on the board
+     */
+    const saveKanjiOnBoard = () => {
+        localStorage.setItem("kanjiOnBoard", JSON.stringify(kanjiOnBoard));
+    }
+
+    /**
+     * Save in LocalStorage the word that the user has unlocked
+     */
     const saveUnlockedWords = () => {
         localStorage.setItem("unlockedWords", JSON.stringify(unlockedWords));
     }
 
+    /**
+     * Save in LocalStorage the money the player has
+     */
     const saveMoney = () => {
         localStorage.setItem("money", JSON.stringify(money));
     }
 
-    const openWordModal = (word) => {
-        setModalList(modalList => [...modalList, {type:"word", word:word}])
-        console.log(modalList)
-    }
-
-    const openKanjiModal = (kanji) => {
-        setModalList(modalList => [...modalList, {type:"kanji", kanji:kanji}])
-        console.log(modalList)
-    }
-
+    useEffect(saveKanjiOnBoard, [kanjiOnBoard])
     useEffect(saveUnlockedWords, [unlockedWords]);
     useEffect(saveMoney, [money]);
 
+    /*
+    * UI manipulation
+     */
+
+    /**
+     * Disable clicking on any of the element of the main UI, for when a modal is opened for example
+     */
     const toggleUI = () => {
         setUIDisabled(showShop || modalList.length!==0)
     }
 
     useEffect(toggleUI, [showShop, modalList])
 
-    const closeLastModal = () => {
-        setModalList(modalList.slice(0, -1));
-    }
-
-    const getModal = () => {
-        if(modalList.length===0) return null;
-        let modal = modalList[modalList.length-1];
-        switch (modal.type) {
-            case 'word':
-                return <ModalWord
-                    key={modal.word.word}
-                    word={modal.word}
-                    closeLastModal={closeLastModal}
-                />;
-            case 'kanji':
-                return <ModalKanji
-                    key={modal.kanji.kanji}
-                    kanji={modal.kanji}
-                    closeLastModal={closeLastModal}
-                />;
-            default:
-                return null;
-        }
-    }
+    /*
+    * Waiting when loading from database
+     */
 
     if (!initialized) {
         return <Loading />;
@@ -204,8 +220,10 @@ const Game = () => {
                 <button>&#127384;</button>
                 <button>&#128202;</button>
             </div>
-            <ShopModal showShop={showShop} setShowShop={setShowShop} kanjiListShop={kanjiListShop} unlockKanjis={unlockKanji} canBuy={canBuy} money={money} setMoney={setMoney}/>
-            {getModal()}
+            <OutsideClickHandler onOutsideClick={() => setShowShop(false)}>
+                <ShopModal showShop={showShop} money={money} setMoney={setMoney} updateSidePanel={updateSidePanel} kanjiList={kanjiList}/>
+            </OutsideClickHandler>
+            <ModalManager modalList={modalList} setModalList={setModalList}/>
         </div>
     );
 }

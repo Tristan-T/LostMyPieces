@@ -1,4 +1,4 @@
-import React, {createRef} from "react";
+import React from "react";
 import OutsideClickHandler from "react-outside-click-handler";
 import "./Modal.css"
 
