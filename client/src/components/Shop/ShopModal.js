@@ -13,7 +13,6 @@ const ShopModal = ({showShop, money, setMoney, updateSidePanel, kanjiList}) => {
         getShopCombination(kanjiList.map(k => k.kanji))
             .then(response => response.json())
             .then(data => {
-                console.log(data)
                 setKanjiListShop(data);
                 setCanBuy(true);
             });

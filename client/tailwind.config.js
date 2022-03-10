@@ -15,6 +15,9 @@ module.exports = {
       yellow: colors.yellow,
       orange: colors.orange,
       red: colors.red,
+      sky: colors.sky,
+      blue: colors.blue,
+      teal: colors.teal,
       'test': "#ad846c"
     },
     borderWidth: {
