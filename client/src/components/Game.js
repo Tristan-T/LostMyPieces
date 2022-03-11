@@ -37,6 +37,7 @@ const Game = () => {
      * @property {position} [position] - The x and y position of the kanji on board.
      */
 
+    //TODO : ADD VARIANTS AND DEFINITIONS
     /**
      * A word made up of kanjis
      * @typedef Word
