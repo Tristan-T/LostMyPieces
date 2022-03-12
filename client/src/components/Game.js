@@ -37,7 +37,13 @@ const Game = () => {
      * @property {position} [position] - The x and y position of the kanji on board.
      */
 
-    //TODO : ADD VARIANTS AND DEFINITIONS
+    /**
+     * Variant for a word
+     * @typedef Variant
+     * @property {string} variant - The common kanji writing of the variant
+     * @property {string} pronounced - The kana writing of the variant
+     */
+
     /**
      * A word made up of kanjis
      * @typedef Word
@@ -45,6 +51,8 @@ const Game = () => {
      * @property {string} actualWord - The real way of writing the word, for display.
      * @property {string} trueReading - The word written in kanas for pronunciation.
      * @property {string[]} priorities - The lists in which the word appears often (potentially empty)
+     * @property {string[][]} [definitions] - The different definitions for the word
+     * @property {Variant[]} [variants] - The different ways to write the word
      */
 
     /**
