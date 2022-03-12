@@ -216,21 +216,21 @@ const Game = () => {
 
     return (
         <div className="Game h-screen w-screen flex">
-            <div className="w-9/12 h-full" style={{pointerEvents:UIDisabled?"none":"auto"}}>
+            <div className="relative w-9/12 h-full" style={{pointerEvents:UIDisabled?"none":"auto"}}>
                 <WhiteBoard kanjiOnBoard={kanjiOnBoard} onMerge={OnMerge} onAdd={(v) => { setKanjiOnBoard([...kanjiOnBoard, v]) }} onDelete={(v) => { setKanjiOnBoard(kanjiOnBoard.filter(t => t !== v)); }} />
+                <div className="ui absolute top-2 right-2 text-2xl" id="money" style={{pointerEvents:UIDisabled?"none":"auto"}}>${money}</div>
             </div>
             <div className="w-3/12 h-full" style={{pointerEvents:UIDisabled?"none":"auto"}}>
                 <SidePanel kanjiList={kanjiList} openKanjiModal={openKanjiModal} />
             </div>
-            <div className="ui absolute top-2 left-2 text-2xl" id="money" style={{pointerEvents:UIDisabled?"none":"auto"}}>${money}</div>
-            <div className="ui absolute ui bottom-4 left-2 text-5xl gray" style={{pointerEvents:UIDisabled?"none":"auto"}}>
+                <div className="ui absolute ui bottom-4 left-2 text-5xl gray" style={{pointerEvents:UIDisabled?"none":"auto"}}>
                 <button onClick={() => setShowShop(!showShop)}>&#127978;</button>
                 <button onClick={() => setKanjiOnBoard([])}>&#129529;</button>
                 <button>&#127384;</button>
                 <button>&#128202;</button>
             </div>
             <OutsideClickHandler onOutsideClick={() => setShowShop(false)}>
-                <ShopModal showShop={showShop} money={money} setMoney={setMoney} updateSidePanel={updateSidePanel} kanjiList={kanjiList}/>
+                <ShopModal showShop={showShop} setShowShop={setShowShop} money={money} setMoney={setMoney} updateSidePanel={updateSidePanel} kanjiList={kanjiList}/>
             </OutsideClickHandler>
             <ModalManager modalList={modalList} setModalList={setModalList}/>
         </div>

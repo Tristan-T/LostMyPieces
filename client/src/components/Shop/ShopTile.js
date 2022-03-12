@@ -3,7 +3,7 @@ import React from "react";
 const ShopTile = ({kanji, unlockKanji, money, setMoney}) => {
     return (
         <div
-            className="rounded-md cursor-pointer select-none bg-gray-100 w-5/6"
+            className="drop-shadow-md cursor-pointer select-none bg-gray-100 w-5/6"
             onClick={(event) => {
                 event.preventDefault();
                 if(money>=50) {
