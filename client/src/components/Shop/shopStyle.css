@@ -1,12 +1,14 @@
 .item-enter {
-    opacity: 1;
+    opacity: 0;
 }
 .item-enter-active {
     opacity: 1;
+    transition: opacity 200ms;
 }
 .item-exit {
-    opacity: 0;
+    opacity: 1;
 }
 .item-exit-active {
     opacity: 0;
+    transition: opacity 200ms;
 }
