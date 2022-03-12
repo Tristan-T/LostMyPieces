@@ -7,11 +7,9 @@ const Word = ({word}) => {
     const [wordLoaded, setWordLoaded] = useState(false);
 
     const getFullWord = () => {
-        word["definitions"] = [];
         getWord(word.word)
             .then(response => response.json())
             .then(data => {
-                console.log(data)
                 setWord({...word, ...data});
                 setWordLoaded(true);
             });

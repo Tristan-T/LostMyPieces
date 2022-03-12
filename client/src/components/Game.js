@@ -11,6 +11,10 @@ import { getKanjisUnlocked, getMerge } from "../services/api";
 
 import configData from "../listKanjis.json"
 
+import {toast, ToastContainer} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+
+
 const Game = () => {
     const [initialized, setInitialized] = useState(false);
     const [kanjiList, setKanjiList] = useState([]);
@@ -106,6 +110,7 @@ const Game = () => {
             .then(data => {
                 if(data.length===0) {
                     //TODO : Visual indication for unmergeable
+                    toast("Brrrr")
                     console.log("No merge candidates");
                 } else {
                     //TODO : Using actualWord instead of word
@@ -233,6 +238,14 @@ const Game = () => {
                 <ShopModal showShop={showShop} setShowShop={setShowShop} money={money} setMoney={setMoney} updateSidePanel={updateSidePanel} kanjiList={kanjiList}/>
             </OutsideClickHandler>
             <ModalManager modalList={modalList} setModalList={setModalList}/>
+            <ToastContainer
+                position="bottom-center"
+                autoClose={1000}
+                hideProgressBar={true}
+                newestOnTop={true}
+                closeOnClick
+                rtl={false}
+            />
         </div>
     );
 }
