@@ -18,6 +18,10 @@ module.exports = {
       sky: colors.sky,
       blue: colors.blue,
       teal: colors.teal,
+      slate: colors.slate,
+      neutral: colors.neutral,
+      zinc: colors.zinc,
+      stone: colors.stone,
       'test': "#ad846c"
     },
     borderWidth: {

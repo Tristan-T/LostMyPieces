@@ -7,7 +7,7 @@ const Kanji = ({kanji}) => {
                 <p className="ml-5 mr-2 text-6xl">{kanji.kanji}</p>
                 <div>
                     <p className="text-4xl mr-5 ml-5 mt-2 flex-1 capitalize">{kanji.meaning}</p>
-                    <p className="text-sm text-gray-800">Strokes : {kanji.strokeCount}</p>
+                    <p className="text-sm text-gray-800 dark:text-gray-200">Strokes : {kanji.strokeCount}</p>
                 </div>
             </div>
             <hr/>
@@ -33,7 +33,7 @@ const Kanji = ({kanji}) => {
                 )}
                 </span>
             </div>
-            <img className="m-auto contrast-200 mt-3" src={kanji.strokeGif}/>
+            <img className="m-auto contrast-200 mt-3 dark:invert" src={kanji.strokeGif}/>
             <div>See on <a className="text-sky-400 after:content-['_↗']" href={"https://jisho.org/search/" + kanji.kanji + "%20%23kanji"} target="_blank">Jisho</a></div>
         </div>)
 }

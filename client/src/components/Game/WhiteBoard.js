@@ -99,10 +99,12 @@ const WhiteBoard = ({ kanjiOnBoard, onMerge, onAdd, onDelete }) => {
      */
     const drawCanvas = (canvas) => {
         const _drawProp = (prop) => {
+            const nightMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
             const { x, y } = prop.position;
 
             context.strokeStyle = prop.hover ? "#FF0000" : "#00FF00";
             context.font = prop.clicked ? '3.7em serif' : '3em serif';
+
             context.textBaseline = 'middle';
             context.textAlign = "center";
 
@@ -117,7 +119,7 @@ const WhiteBoard = ({ kanjiOnBoard, onMerge, onAdd, onDelete }) => {
             }
 
             if (prop.hover) {
-                context.fillStyle = "#dbdbdb";
+                context.fillStyle = nightMode ? "#000000" : "#d1d5db";
                 context.fillRect(
                     bounds.minX,
                     bounds.minY,
@@ -125,7 +127,7 @@ const WhiteBoard = ({ kanjiOnBoard, onMerge, onAdd, onDelete }) => {
                     bounds.maxY - bounds.minY
                 );
             }
-            context.fillStyle = "#000000";
+            context.fillStyle = nightMode ? "#e5e7eb" : "#000000";
             context.fillText(prop.kanji, x * canvas.width, y * canvas.height);
         }
         canvas.width = canvas.offsetWidth;
@@ -288,7 +290,7 @@ const WhiteBoard = ({ kanjiOnBoard, onMerge, onAdd, onDelete }) => {
 
     useEffect(CanvasInit);
 
-    return (<div className='WhiteBoard h-full w-full bg-gray-200'>
+    return (<div className='WhiteBoard h-full w-full bg-gray-200 dark:bg-zinc-800'>
         <canvas
             ref={canvasRef}
             className='h-full w-full'
