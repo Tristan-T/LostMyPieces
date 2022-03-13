@@ -228,11 +228,19 @@ const Game = () => {
             <div className="w-3/12 h-full" style={{pointerEvents:UIDisabled?"none":"auto"}}>
                 <SidePanel kanjiList={kanjiList} openKanjiModal={openKanjiModal} />
             </div>
-            <div className="ui absolute ui bottom-4 left-2 text-5xl gray" style={{pointerEvents:UIDisabled?"none":"auto"}}>
-                <button onClick={() => setShowShop(!showShop)}>&#127978;</button>
-                <button onClick={() => setKanjiOnBoard([])}>&#129529;</button>
-                <button>&#127384;</button>
-                <button>&#128202;</button>
+            <div className="ui absolute ui bottom-4 left-2 text-5xl gray flex flex-row dark:text-gray-300 space-x-2" style={{pointerEvents:UIDisabled?"none":"auto"}}>
+                <svg onClick={() => setShowShop(!showShop)} xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 transition ease-in-out hover:scale-110 dark:hover:text-gray-50 hover:text-gray-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                <svg onClick={() => setKanjiOnBoard([])} xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 transition ease-in-out hover:scale-110 dark:hover:text-gray-50 hover:text-gray-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+                <svg onClick={() => toast.error("Not implemented")} xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 transition ease-in-out hover:scale-110 dark:hover:text-gray-50 hover:text-gray-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+                <svg onClick={() => toast.error("Not implemented")} xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 transition ease-in-out hover:scale-110 dark:hover:text-gray-50 hover:text-gray-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
             </div>
             <OutsideClickHandler onOutsideClick={() => setShowShop(false)}>
                 <ShopModal showShop={showShop} setShowShop={setShowShop} money={money} setMoney={setMoney} updateSidePanel={updateSidePanel} kanjiList={kanjiList}/>
