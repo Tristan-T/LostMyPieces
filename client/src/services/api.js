@@ -1,25 +1,25 @@
 export function getKanjisList() {
-    return fetch("https://lostmypieces.com:3000/kanjis")
+    return fetch("https://api.lostmypieces.com/kanjis")
 }
 
 export function getWordsList() {
-    return fetch("https://lostmypieces.com:3000/words")
+    return fetch("https://api.lostmypieces.com/words")
 }
 
 export function getKanji(kanji) {
-    return fetch("https://lostmypieces.com:3000/kanjis/" + kanji)
+    return fetch("https://api.lostmypieces.com/kanjis/" + kanji)
 }
 
 export function getWord(word) {
-    return fetch("https://lostmypieces.com:3000/words/" + word)
+    return fetch("https://api.lostmypieces.com/words/" + word)
 }
 
 export function getNumberCombination() {
-    return fetch("https://lostmypieces.com:3000/getNumberCombination")
+    return fetch("https://api.lostmypieces.com/getNumberCombination")
 }
 
 export function getMerge(input) {
-    return fetch("https://lostmypieces.com:3000/getMerge", {
+    return fetch("https://api.lostmypieces.com/getMerge", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -29,7 +29,7 @@ export function getMerge(input) {
 }
 
 export function getShopCombination(kanjis) {
-    return fetch("https://lostmypieces.com:3000/getShopCombination", {
+    return fetch("https://api.lostmypieces.com/getShopCombination", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -39,7 +39,7 @@ export function getShopCombination(kanjis) {
 }
 
 export function getKanjisUnlocked(kanjis) {
-    return fetch("https://lostmypieces.com:3000/getKanjisUnlocked", {
+    return fetch("https://api.lostmypieces.com/getKanjisUnlocked", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
