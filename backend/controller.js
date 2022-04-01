@@ -75,7 +75,7 @@ const getCountCombinationShop = async (req, reply) => {
                  MATCH (k:Kanji)-->(w:Word)<--(buyable:Kanji)
                  WITH COLLECT(k) AS found_components, kanji_unlocked, w, buyable
                  WHERE ALL(k IN found_components WHERE k.kanji IN kanji_unlocked OR k=buyable)
-                 RETURN buyable.kanji, COUNT(DISTINCT w) AS NB
+                 RETURN buyable.kanji, buyable.meaning, COUNT(DISTINCT w) AS NB
                 `
   let queryRes = await req.neoSession.run(query, {"listKanjis":req.body});
   reply.type("application/json");
@@ -85,7 +85,7 @@ const getCountCombinationShop = async (req, reply) => {
   //  result[node.get("buyable.kanji")] = node.get("NB");
   //}
   //return result;
-  return queryRes.records.map(k => ({kanji:k.get("buyable.kanji"), uses:k.get("NB")}));
+  return queryRes.records.map(k => ({kanji:k.get("buyable.kanji"), uses:k.get("NB"), english:k.get("buyable.meaning")}));
 }
 
 /**

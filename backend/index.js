@@ -39,7 +39,7 @@ routes.forEach((route, index) => {
     app.route(route)
 })
 
-app.listen(3000, '::', (err, address) => {
+app.listen(8000, (err, address) => {
     if (err) {
         app.log.error(err)
         process.exit(1)
