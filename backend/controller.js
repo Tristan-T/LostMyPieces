@@ -80,11 +80,12 @@ const getCountCombinationShop = async (req, reply) => {
   let queryRes = await req.neoSession.run(query, {"listKanjis":req.body});
   reply.type("application/json");
   req.neoSession.close()
-  let result = {}
-  for(let node of queryRes.records) {
-    result[node.get("buyable.kanji")] = node.get("NB");
-  }
-  return result;
+  //let result = {}
+  //for(let node of queryRes.records) {
+  //  result[node.get("buyable.kanji")] = node.get("NB");
+  //}
+  //return result;
+  return queryRes.records.map(k => ({kanji:k.get("buyable.kanji"), uses:k.get("NB")}));
 }
 
 /**
