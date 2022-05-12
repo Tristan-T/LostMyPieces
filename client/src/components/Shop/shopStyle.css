@@ -1,0 +1,36 @@
+.item-enter {
+    opacity: 0;
+}
+.item-enter-active {
+    opacity: 1;
+    transition: opacity 200ms;
+}
+.item-exit {
+    opacity: 1;
+}
+.item-exit-active {
+    opacity: 0;
+    transition: opacity 200ms;
+}
+
+.shop-enter {
+    opacity: 0;
+    left:-60vw;
+}
+
+.shop-enter-active {
+    opacity: 1;
+    left:0;
+    transition: left 500ms;
+}
+
+.shop-exit {
+    opacity: 0;
+    left:0;
+}
+
+.shop-exit-active {
+    opacity: 1;
+    left:-60vw;
+    transition: left 500ms;
+}
