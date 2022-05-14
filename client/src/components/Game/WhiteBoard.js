@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import bgLogo from "../../images/shiba-inu.png";
 // import { canUseDom } from 'react-toastify/dist/utils';
 
@@ -9,10 +9,13 @@ const WhiteBoard = ({ kanjiOnBoard, globalDragContent, setGlobalDragContent, onM
     const bgImage = new Image();
     bgImage.src = bgLogo;
     bgImage.onload = (() => drawCanvas(canvasRef.current));
-    let dragging = false;
 
-    let offset = {x: 0, y: 0};
-    let lastMousePos = {x: -1, y: -1};
+    /* let offset = {x: 0, y: 0};
+    let lastMousePos = {x: -1, y: -1}; */
+
+    const [offset, setOffset] = useState({x: 0, y: 0});
+    const [lastMousePos, setLastMousePos] = useState({x:-1, y:-1});
+    const [dragging, setDragging] = useState(false);
 
     const processOverlap = (canvas, origin) => {
         const testOverlap = (b1, b2) => {
@@ -128,15 +131,6 @@ const WhiteBoard = ({ kanjiOnBoard, globalDragContent, setGlobalDragContent, onM
                     bounds.maxY - bounds.minY);
             }
 
-            /* if (prop.hover) {
-                context.fillStyle = nightMode ? "#000000" : "#d1d5db";
-                context.fillRect(
-                    bounds.minX,
-                    bounds.minY,
-                    bounds.maxX - bounds.minX,
-                    bounds.maxY - bounds.minY
-                );
-            } */
             context.fillStyle = nightMode ? 
                 (prop.hover || prop.clicked ? "#fafcff" : "#b5b5b5") :
                 (prop.hover || prop.clicked ? "#1a1a1a" : "#000000");
@@ -198,8 +192,7 @@ const WhiteBoard = ({ kanjiOnBoard, globalDragContent, setGlobalDragContent, onM
         event.preventDefault();
 
         if (event.button === 0) {
-            dragging = true;
-            event.target.style.cursor = "grabbing";
+            setDragging(true);
         }
 
         kanjiOnBoard.slice().reverse().every(v => {
@@ -229,7 +222,7 @@ const WhiteBoard = ({ kanjiOnBoard, globalDragContent, setGlobalDragContent, onM
     const OnMouseMove = (event) => {
         let changed = false;
 
-        if (lastMousePos.x === -1 || lastMousePos.y === -1) lastMousePos = {x: event.pageX, y: event.pageY}; 
+        if (lastMousePos.x === -1 || lastMousePos.y === -1) setLastMousePos({x: event.pageX, y: event.pageY}); 
 
         if (!dragging) {
             if (hoverTest(event)) {
@@ -240,7 +233,6 @@ const WhiteBoard = ({ kanjiOnBoard, globalDragContent, setGlobalDragContent, onM
         // move dragging object
         kanjiOnBoard.forEach(v => {
             if (v.clicked) {
-                console.log(offset.x, offset.y);
                 v.position.x = event.pageX / event.target.width - offset.x;
                 v.position.y = event.pageY / event.target.height - offset.y;
 
@@ -250,8 +242,8 @@ const WhiteBoard = ({ kanjiOnBoard, globalDragContent, setGlobalDragContent, onM
 
         if (globalDragContent) {
             globalDragContent.prop.position = {
-                x: event.pageX / event.target.width + offset.x,
-                y: event.pageY / event.target.height + offset.y
+                x: event.pageX / event.target.width - offset.x,
+                y: event.pageY / event.target.height - offset.y
             };
 
             changed = true;
@@ -259,12 +251,15 @@ const WhiteBoard = ({ kanjiOnBoard, globalDragContent, setGlobalDragContent, onM
 
         if (dragging && !changed) {
             console.log("dragging");
-            offset.x += (event.pageX - lastMousePos.x) / event.target.width;
-            offset.y += (event.pageY - lastMousePos.y) / event.target.height;
+            const newOffset = {
+                x: offset.x + (event.pageX - lastMousePos.x) / event.target.width,
+                y: offset.y + (event.pageY - lastMousePos.y) / event.target.height
+            };
+            setOffset(newOffset);
             changed = true;
         }
 
-        lastMousePos = {x: event.pageX, y: event.pageY};
+        setLastMousePos({x: event.pageX, y: event.pageY});
 
         if (changed)
             drawCanvas(event.target);
@@ -276,9 +271,8 @@ const WhiteBoard = ({ kanjiOnBoard, globalDragContent, setGlobalDragContent, onM
      */
     const OnMouseUp = (event) => {
         if (dragging && event.button === 0) {
-            dragging = false;
-            event.target.style.cursor = "auto";
-            lastMousePos = {x:-1,y:-1};
+            setDragging(false);
+            setLastMousePos({x:-1,y:-1});
 
             kanjiOnBoard.forEach(v => {
                 if (v.clicked) {
