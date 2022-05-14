@@ -1,12 +1,18 @@
 import React, { useEffect, useRef } from 'react';
+import bgLogo from "../../images/shiba-inu.png";
+// import { canUseDom } from 'react-toastify/dist/utils';
 
-const WhiteBoard = ({ kanjiOnBoard, onMerge, onAdd, onDelete }) => {
+const WhiteBoard = ({ kanjiOnBoard, globalDragContent, setGlobalDragContent, onMerge, onAdd, onDelete }) => {
     const DEBUG = false;
 
     const canvasRef = useRef(null);
+    const bgImage = new Image();
+    bgImage.src = bgLogo;
+    bgImage.onload = (() => drawCanvas(canvasRef.current));
     let dragging = false;
 
-    let tempProp;
+    let offset = {x: 0, y: 0};
+    let lastMousePos = {x: -1, y: -1};
 
     const processOverlap = (canvas, origin) => {
         const testOverlap = (b1, b2) => {
@@ -21,6 +27,7 @@ const WhiteBoard = ({ kanjiOnBoard, onMerge, onAdd, onDelete }) => {
             return true;
         }
 
+        const startTime = new Date();
         for (let i = 0; i < kanjiOnBoard.length; i++) {
             const target = kanjiOnBoard[i];
 
@@ -31,10 +38,11 @@ const WhiteBoard = ({ kanjiOnBoard, onMerge, onAdd, onDelete }) => {
             const targetBounds = getTextBound(canvas, target);
 
             if (testOverlap(originBounds, targetBounds)) {
-                console.log("Overlap !", origin.kanji, target.kanji);
+                // console.log("Overlap !", origin.kanji, target.kanji);
                 onMerge(origin, target);
             }
         }
+        console.log(`Processed overlap in : ${(new Date() - startTime) / 1000}`);
     }
 
     /**
@@ -74,11 +82,13 @@ const WhiteBoard = ({ kanjiOnBoard, onMerge, onAdd, onDelete }) => {
      * @returns 
      */
     const getTextBound = (canvas, prop) => {
-        const { x, y } = prop.position;
+        let { x, y } = prop.position;
+        x = (x + offset.x);
+        y = (y + offset.y);
 
         const context = canvas.getContext('2d');
 
-        const text = prop.kanji.replace(/./, "人");
+        const text = prop.kanji.replace(/./, "国");
 
         const textSize = context.measureText(text);
         const height = textSize.actualBoundingBoxAscent + textSize.actualBoundingBoxDescent;
@@ -103,7 +113,7 @@ const WhiteBoard = ({ kanjiOnBoard, onMerge, onAdd, onDelete }) => {
             const { x, y } = prop.position;
 
             context.strokeStyle = prop.hover ? "#FF0000" : "#00FF00";
-            context.font = prop.clicked ? '3.7em serif' : '3em serif';
+            context.font = prop.clicked ? `${3.7}em serif` : `${3}em serif`;
 
             context.textBaseline = 'middle';
             context.textAlign = "center";
@@ -118,7 +128,7 @@ const WhiteBoard = ({ kanjiOnBoard, onMerge, onAdd, onDelete }) => {
                     bounds.maxY - bounds.minY);
             }
 
-            if (prop.hover) {
+            /* if (prop.hover) {
                 context.fillStyle = nightMode ? "#000000" : "#d1d5db";
                 context.fillRect(
                     bounds.minX,
@@ -126,17 +136,26 @@ const WhiteBoard = ({ kanjiOnBoard, onMerge, onAdd, onDelete }) => {
                     bounds.maxX - bounds.minX,
                     bounds.maxY - bounds.minY
                 );
-            }
-            context.fillStyle = nightMode ? "#e5e7eb" : "#000000";
-            context.fillText(prop.kanji, x * canvas.width, y * canvas.height);
+            } */
+            context.fillStyle = nightMode ? 
+                (prop.hover || prop.clicked ? "#fafcff" : "#b5b5b5") :
+                (prop.hover || prop.clicked ? "#1a1a1a" : "#000000");
+            context.fillText(prop.kanji, (x + offset.x) * canvas.width, (y + offset.y) * canvas.height);
         }
         canvas.width = canvas.offsetWidth;
         canvas.height = canvas.offsetHeight;
 
         const context = canvas.getContext('2d');
 
+        context.drawImage(bgImage, (0.5 + offset.x) * canvas.width - bgImage.width / 2.0, (0.5 + offset.y) * canvas.height - bgImage.height / 2.0);
+
         kanjiOnBoard.forEach(_drawProp);
-        if (tempProp) _drawProp(tempProp);
+
+        if (globalDragContent?.prop.position) {
+            console.log(globalDragContent);
+            _drawProp(globalDragContent.prop);
+        }
+        // if (tempProp) _drawProp(tempProp);
     };
 
     const CanvasInit = () => {
@@ -178,6 +197,11 @@ const WhiteBoard = ({ kanjiOnBoard, onMerge, onAdd, onDelete }) => {
     const OnMouseDown = (event) => {
         event.preventDefault();
 
+        if (event.button === 0) {
+            dragging = true;
+            event.target.style.cursor = "grabbing";
+        }
+
         kanjiOnBoard.slice().reverse().every(v => {
             const bounds = getTextBound(event.target, v);
 
@@ -185,14 +209,11 @@ const WhiteBoard = ({ kanjiOnBoard, onMerge, onAdd, onDelete }) => {
             if (event.pageX < bounds.minX || event.pageY < bounds.minY || event.pageX > bounds.maxX || event.pageY > bounds.maxY)
                 return true;
 
-
-
             if (event.button === 2) { // right click
                 onDelete(v);
             } else if (event.button === 0) { // left click
                 v.clicked = true;
                 v.hover = false;
-                dragging = true;
             }
 
             return false;
@@ -208,23 +229,42 @@ const WhiteBoard = ({ kanjiOnBoard, onMerge, onAdd, onDelete }) => {
     const OnMouseMove = (event) => {
         let changed = false;
 
-        if (!dragging) {
-            // cause too many draw calls
-            // kanjiOnBoard.forEach(v => { if (v.hover) changed = true; v.hover = false });
+        if (lastMousePos.x === -1 || lastMousePos.y === -1) lastMousePos = {x: event.pageX, y: event.pageY}; 
 
+        if (!dragging) {
             if (hoverTest(event)) {
                 changed = true;
             }
         }
 
+        // move dragging object
         kanjiOnBoard.forEach(v => {
             if (v.clicked) {
-                v.position.x = event.pageX / event.target.width;
-                v.position.y = event.pageY / event.target.height;
+                console.log(offset.x, offset.y);
+                v.position.x = event.pageX / event.target.width - offset.x;
+                v.position.y = event.pageY / event.target.height - offset.y;
 
                 changed = true;
             }
         });
+
+        if (globalDragContent) {
+            globalDragContent.prop.position = {
+                x: event.pageX / event.target.width + offset.x,
+                y: event.pageY / event.target.height + offset.y
+            };
+
+            changed = true;
+        }
+
+        if (dragging && !changed) {
+            console.log("dragging");
+            offset.x += (event.pageX - lastMousePos.x) / event.target.width;
+            offset.y += (event.pageY - lastMousePos.y) / event.target.height;
+            changed = true;
+        }
+
+        lastMousePos = {x: event.pageX, y: event.pageY};
 
         if (changed)
             drawCanvas(event.target);
@@ -235,8 +275,10 @@ const WhiteBoard = ({ kanjiOnBoard, onMerge, onAdd, onDelete }) => {
      * @param {MouseEvent} event 
      */
     const OnMouseUp = (event) => {
-        if (dragging) {
+        if (dragging && event.button === 0) {
             dragging = false;
+            event.target.style.cursor = "auto";
+            lastMousePos = {x:-1,y:-1};
 
             kanjiOnBoard.forEach(v => {
                 if (v.clicked) {
@@ -250,59 +292,43 @@ const WhiteBoard = ({ kanjiOnBoard, onMerge, onAdd, onDelete }) => {
 
             drawCanvas(event.target);
         }
+
+        
+        // DROP EXTERN DRAG CONTENT
+        if (globalDragContent) {
+            setGlobalDragContent(undefined);
+            onAdd(globalDragContent.prop);
+
+            processOverlap(event.target, globalDragContent.prop);
+
+            drawCanvas(event.target);
+        }
     }
-
-    /**
-     * 
-     * @param {DragEvent} event 
-     */
-    const OnDragOver = (event) => {
-        event.preventDefault();
-        /* const kanji = JSON.parse(event.dataTransfer.getData("application/lost-my-pieces")); */
-
-        const [canvasX, canvasY] = [event.pageX / event.target.width, event.pageY / event.target.height];
-
-        tempProp = { kanji: "O", position: { x: canvasX, y: canvasY } };
-
-        drawCanvas(event.target);
-    };
-
-    /**
-     * 
-     * @param {DragEvent} event 
-     */
-    const OnDragExit = (event) => { tempProp = undefined; drawCanvas(event.target); }
-
-    /**
-     * 
-     * @param {DragEvent} event 
-     */
-    const OnDrop = (event) => {
-        event.preventDefault();
-        const kanji = JSON.parse(event.dataTransfer.getData("application/lost-my-pieces"));
-        const [canvasX, canvasY] = [event.pageX / event.target.width, event.pageY / event.target.height];
-
-        const newProp = { ...kanji, position: { x: canvasX, y: canvasY } };
-        onAdd(newProp);
-
-        processOverlap(event.target, newProp);
-    };
 
     useEffect(CanvasInit);
 
-    return (<div className='WhiteBoard h-full w-full bg-gray-200 dark:bg-zinc-800'>
+    return (<div className={`WhiteBoard h-full w-full bg-gray-200 dark:bg-zinc-800`}>
         <canvas
             ref={canvasRef}
-            className='h-full w-full'
+            className={`h-full w-full`}
             onContextMenu={(e) => e.preventDefault()}
             onDoubleClick={OnDoubleClick}
             onMouseDown={OnMouseDown}
             onMouseMove={OnMouseMove}
             onMouseUp={OnMouseUp}
-            onMouseLeave={OnMouseUp}
-            onDragOver={OnDragOver}
-            onDragExit={OnDragExit}
-            onDrop={OnDrop}
+            onMouseLeave={(event) => {
+                if (dragging) {
+                    OnMouseUp(event);
+                }
+
+                if (globalDragContent) {
+                    globalDragContent.prop.position = undefined;
+                    drawCanvas(event.target);
+                }
+            }}
+            onWheel={(event) => {
+                event.preventDefault();
+            }}
         >
 
         </canvas>

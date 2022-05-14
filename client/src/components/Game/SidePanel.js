@@ -1,4 +1,4 @@
-const SidePanel = ({ kanjiList, openKanjiModal }) => {
+const SidePanel = ({ kanjiList, openKanjiModal, onMouseDown }) => {
     return (
         <div className="SidePanel scroll-smooth snap-y bg-gray-300 h-full w-full border-l-gray-500 dark:border-l-gray-800 border-l-2 dark:bg-zinc-900 dark:text-gray-300">
             <div className="snap-start SidePanelMenu border-b-thin border-b-gray-500 dark:border-b-gray-800 flex flex-row justify-between text-center chi">
@@ -13,13 +13,8 @@ const SidePanel = ({ kanjiList, openKanjiModal }) => {
                         <div
                             key={v.kanji}
                             className="snap-start cursor-pointer py-1 px-2 border-b-thin border-b-gray-500  dark:border-b-gray-800 flex items-center select-none hover:bg-gray-200 duration-150 dark:hover:bg-gray-800"
-                            draggable="true"
-                            onClick={() => {openKanjiModal(v)}}
-                            onDragStart={(event) => {
-                                const image = new Image();
-                                event.dataTransfer.setData("application/lost-my-pieces", JSON.stringify(v || {}));
-                                event.dataTransfer.setDragImage(image, 10, 10);
-                            }}
+                            onMouseDown={(event) => {onMouseDown(event, v)}}
+                            onClick={() => openKanjiModal(v)}
                         >
                             <div className="flex flex-col">
                                 <div className="text-xs text-gray-700 dark:text-gray-500">{v.kun_readings[0]}</div>
