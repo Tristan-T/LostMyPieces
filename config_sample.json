@@ -1,0 +1,10 @@
+{
+	"database" : {
+		"uri" : "",
+		"user" : "",
+		"password" : ""
+	}
+	"client" : {
+		"baseKanjis" : ["一", "人", "日"]
+	}
+}

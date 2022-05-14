@@ -67,25 +67,37 @@ const getWord = async (req, reply) => {
  */
 const getCountCombinationShop = async (req, reply) => {
   console.log('Get count combination shop with : ' + req.body);
-  const query = `WITH $listKanjis as kanji_unlocked
-                 MATCH (k:Kanji)
-                 WHERE NOT k.kanji IN kanji_unlocked
-                 WITH DISTINCT kanji_unlocked, COLLECT(k) AS unlockable
-                 UNWIND unlockable AS buyable
-                 MATCH (k:Kanji)-->(w:Word)<--(buyable:Kanji)
-                 WITH COLLECT(k) AS found_components, kanji_unlocked, w, buyable
-                 WHERE ALL(k IN found_components WHERE k.kanji IN kanji_unlocked OR k=buyable)
-                 RETURN buyable.kanji, buyable.meaning, COUNT(DISTINCT w) AS NB
+  var startTime = performance.now()
+  const query = ` WITH $listKanjis as kanji_list
+                  MATCH (k:Kanji)-[:l2]->(w:Word)<-[:l2]-(k2:Kanji)
+                  WHERE k2.kanji IN kanji_list AND NOT k.kanji IN kanji_list
+                  RETURN k.kanji, COUNT(DISTINCT w) AS NB
+                  UNION
+                  WITH $listKanjis as kanji_list
+                  MATCH (k:Kanji)-[:l3]->(w:Word)<-[:l3]-(k2:Kanji),(w)<-[:l3]-(k3:Kanji)
+                  WHERE [k2.kanji, k3.kanji] IN kanji_list AND NOT k.kanji IN kanji_list
+                  RETURN k.kanji, COUNT(DISTINCT w) AS NB
+                  UNION
+                  WITH $listKanjis as kanji_list
+                  MATCH (k:Kanji)-[:l4]->(w:Word)<-[:l4]-(k2:Kanji),(k3:Kanji)-[:l4]->(w)<-[:l4]-(k4:Kanji)
+                  WHERE k2.kanji IN kanji_list AND k3.kanji IN kanji_list AND k4.kanji IN kanji_list AND NOT k.kanji IN kanji_list
+                  RETURN k.kanji, COUNT(DISTINCT w) AS NB
+                  UNION
+                  WITH $listKanjis as kanji_list
+                  MATCH (k:Kanji)-[:l5]->(w:Word)<-[:l5]-(k2:Kanji),(k3:Kanji)-[:l5]->(w)<-[:l5]-(k4:Kanji), (k5:Kanji)-[:l5]->(w)
+                  WHERE k2.kanji IN kanji_list AND k3.kanji IN kanji_list AND k4.kanji IN kanji_list AND k5.kanji IN kanji_list AND NOT k.kanji IN kanji_list
+                  RETURN k.kanji, COUNT(DISTINCT w) AS NB
                 `
   let queryRes = await req.neoSession.run(query, {"listKanjis":req.body});
   reply.type("application/json");
   req.neoSession.close()
-  //let result = {}
-  //for(let node of queryRes.records) {
-  //  result[node.get("buyable.kanji")] = node.get("NB");
-  //}
-  //return result;
-  return queryRes.records.map(k => ({kanji:k.get("buyable.kanji"), uses:k.get("NB"), english:k.get("buyable.meaning")}));
+  let result = {}
+  for(let node of queryRes.records) {
+    node.get("k.kanji") in result ? result[node.get("k.kanji")] += node.get("NB") : result[node.get("k.kanji")] = node.get("NB");
+  }
+  var endTime = performance.now()
+  var endTime = performance.now()
+  return result;
 }
 
 /**

@@ -1,5 +1,5 @@
 {
-  "name": "testfastify",
+  "name": "backend",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "fastify": "^3.27.1",
+    "fastify-cors": "^6.0.3",
     "neo4j-driver": "^4.4.2"
   }
 }

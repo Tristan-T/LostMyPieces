@@ -119,6 +119,7 @@ async function getDerivatives(kanji) {
 
               result[strippedVariant] = {
                 id: strippedVariant,
+                actualWord: variant.written,
                 trueReading: variant.pronounced,
                 priorities: variant.priorities,
                 components: Array.from(strippedVariant),
