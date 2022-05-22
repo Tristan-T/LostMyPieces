@@ -288,10 +288,6 @@ const Game = () => {
                     <EraseLogo onClick={() => setKanjiOnBoard([])} className="h-8 w-8 transition ease-in-out hover:scale-110 dark:hover:text-gray-50 hover:text-gray-800" />
                 </div>
 
-                <!-- <div onClick={() => toast.error("Not implemented")} className='rounded-full bg-pannel-dark dark:bg-pannel-dark-dark p-2'>
-                    <StatsLogo className="h-8 w-8 transition ease-in-out hover:scale-110 fill-blue" />
-                </div> -->
-
                 <div onClick={() => setShowTutorial(true)} className='rounded-full bg-pannel-dark dark:bg-pannel-dark-dark p-2'>
                     <HelpLogo className="h-8 w-8 transition ease-in-out hover:scale-110 fill-blue" />
                 </div>
