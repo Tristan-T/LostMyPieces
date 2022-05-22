@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import {ReactComponent as ForkLiftSvg} from '../../svg/forklift.svg';
 
 const KanjiList = ({kanjiList, setKanjiList, openKanjiModal, onMouseDown}) => {
-    return <div className="flex flex-col overflow-y-scroll scroll-smooth ">
+    return <div className="flex flex-col overflow-y-auto scroll-smooth ">
         <div 
             className="
                 hidden lg:flex flex-col md:flex-row justify-center text-center mx-2 my-2 base-center
@@ -86,8 +86,7 @@ const SidePanel = ({ kanjiList, setKanjiList, openKanjiModal, onMouseDown }) => 
 
     return (
         <div className="
-          bg-pannel-back dark:bg-pannel-back-dark dark:text-gray-300
-            SidePanel scroll-smooth snap-y h-full w-full ">
+          bg-pannel-back dark:bg-pannel-back-dark dark:text-gray-300 h-full w-full">
             <div className="h-full flex flex-col">
                 {
                     currentTab == TABS.KANJIS ? 

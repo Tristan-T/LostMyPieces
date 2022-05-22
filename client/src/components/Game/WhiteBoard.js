@@ -37,21 +37,22 @@ const easeInOutQuint = (x) => {
     return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2);
 }
 
+const bgImage = new Image();
+bgImage.src = bgPath;
+
+const bgImageDark = new Image();
+bgImageDark.src = bgPathDark;
+
+const trashImage = new Image();
+trashImage.src = trashPath;
+
+const trashImageHover = new Image();
+trashImageHover.src = trashPathHover;
+
 const WhiteBoard = ({ kanjiOnBoard, globalDragContent, setGlobalDragContent, onMerge, onAdd, onDelete }) => {
     const DEBUG = false;
 
     const canvasRef = useRef(null);
-    const bgImage = new Image();
-    bgImage.src = bgPath;
-
-    const bgImageDark = new Image();
-    bgImageDark.src = bgPathDark;
-
-    const trashImage = new Image();
-    trashImage.src = trashPath;
-
-    const trashImageHover = new Image();
-    trashImageHover.src = trashPathHover;
 
     const offsetRef = useRef({x: 0, y: 0});
     const lastMousePosRef = useRef({x:-1, y:-1});
@@ -198,7 +199,7 @@ const WhiteBoard = ({ kanjiOnBoard, globalDragContent, setGlobalDragContent, onM
          const context = canvas.getContext('2d');
         
         context.beginPath();
-        const step = Math.max(canvas.width, canvas.height) / 20;
+        const step = 100;
         const left = -Math.ceil(canvas.width / step) * step * 100 + offsetRef.current.x * canvas.width;
         const top =  -Math.ceil(canvas.height / step) * step * 100 + offsetRef.current.y * canvas.height;
         const right = 2 * canvas.width;
