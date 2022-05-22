@@ -3,7 +3,11 @@ const colors = require('tailwindcss/colors')
 module.exports = {
   content: ['./src/**/*.{js,jsx,ts,tsx}'],
   theme: {
-    extend: {},
+    extend: {
+      transitionProperty: {
+        'width': 'width'
+      }
+    },
     colors: {
       transparent: 'transparent',
       current: 'currentColor',
@@ -22,7 +26,31 @@ module.exports = {
       neutral: colors.neutral,
       zinc: colors.zinc,
       stone: colors.stone,
-      'test': "#ad846c"
+      'pannel-dark': {
+        light: "#0e0e10",
+        dark: "#0C0C10",
+        DEFAULT: "#ECECF4"
+      },
+      'pannel-light': {
+        light: "#FFFFFF",
+        dark: "#121214",
+        DEFAULT: "#FFFFFF"
+      },
+      'pannel-blue': {
+        light: "#8121ff",
+        dark: "#8121ff",
+        DEFAULT: "#8121ff"
+      },
+      'pannel-back': {
+        light: "#F8F8FE",
+        dark: "#1C1C20",
+        DEFAULT: "#F8F8FE"
+      },
+      'text': {
+        light: "#FFFFFF",
+        dark: "#0C0C10",
+        DEFAULT: "#FFFFFF"
+      },
     },
     borderWidth: {
       DEFAULT: '1px',      

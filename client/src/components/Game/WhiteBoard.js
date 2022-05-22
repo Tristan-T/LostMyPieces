@@ -1,21 +1,67 @@
 import React, { useState, useEffect, useRef } from 'react';
-import bgLogo from "../../images/shiba-inu.png";
+import bgPath from "../../images/shiba-inu.png";
+import bgPathDark from "../../images/shiba-inu-dark.png";
+import trashPath from "../../svg/trash.svg";
+import trashPathHover from "../../svg/trash_hover.svg";
 // import { canUseDom } from 'react-toastify/dist/utils';
+
+const easeOutElastic = (x) => {
+    const c4 = (2 * Math.PI) / 3;
+
+    return x === 0
+        ? 0
+        : x === 1
+        ? 1
+        : Math.pow(2, -10 * x) * Math.sin((x * 10 - 0.75) * c4) + 1;
+}
+
+const easeOutBounce = (x) => {
+    const n1 = 7.5625;
+    const d1 = 2.75;
+    
+    if (x < 1 / d1) {
+        return n1 * x * x;
+    } else if (x < 2 / d1) {
+        return n1 * (x -= 1.5 / d1) * x + 0.75;
+    } else if (x < 2.5 / d1) {
+        return n1 * (x -= 2.25 / d1) * x + 0.9375;
+    } else {
+        return n1 * (x -= 2.625 / d1) * x + 0.984375;
+    }  
+}
+
+const easeInOutQuint = (x) => {
+    const c1 = 1.70158;
+    const c3 = c1 + 1;
+
+    return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2);
+}
 
 const WhiteBoard = ({ kanjiOnBoard, globalDragContent, setGlobalDragContent, onMerge, onAdd, onDelete }) => {
     const DEBUG = false;
 
     const canvasRef = useRef(null);
     const bgImage = new Image();
-    bgImage.src = bgLogo;
-    bgImage.onload = (() => drawCanvas(canvasRef.current));
+    bgImage.src = bgPath;
 
-    /* let offset = {x: 0, y: 0};
-    let lastMousePos = {x: -1, y: -1}; */
+    const bgImageDark = new Image();
+    bgImageDark.src = bgPathDark;
 
-    const [offset, setOffset] = useState({x: 0, y: 0});
-    const [lastMousePos, setLastMousePos] = useState({x:-1, y:-1});
-    const [dragging, setDragging] = useState(false);
+    const trashImage = new Image();
+    trashImage.src = trashPath;
+
+    const trashImageHover = new Image();
+    trashImageHover.src = trashPathHover;
+
+    const offsetRef = useRef({x: 0, y: 0});
+    const lastMousePosRef = useRef({x:-1, y:-1});
+    const draggingRef = useRef(false);
+    const animationRef = useRef(null);
+    const lastTimeRef = useRef(null);
+
+    const deleteZoneAnimation = useRef({progress: 0, value: 0});
+
+    const deleteZoneOffset = useRef(0.1);
 
     const processOverlap = (canvas, origin) => {
         const testOverlap = (b1, b2) => {
@@ -86,8 +132,8 @@ const WhiteBoard = ({ kanjiOnBoard, globalDragContent, setGlobalDragContent, onM
      */
     const getTextBound = (canvas, prop) => {
         let { x, y } = prop.position;
-        x = (x + offset.x);
-        y = (y + offset.y);
+        x = (x + offsetRef.current.x);
+        y = (y + offsetRef.current.y);
 
         const context = canvas.getContext('2d');
 
@@ -110,9 +156,9 @@ const WhiteBoard = ({ kanjiOnBoard, globalDragContent, setGlobalDragContent, onM
      * 
      * @param {HTMLCanvasElement} canvas 
      */
-    const drawCanvas = (canvas) => {
+    const Update = () => {
+        const nightMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
         const _drawProp = (prop) => {
-            const nightMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
             const { x, y } = prop.position;
 
             context.strokeStyle = prop.hover ? "#FF0000" : "#00FF00";
@@ -134,34 +180,86 @@ const WhiteBoard = ({ kanjiOnBoard, globalDragContent, setGlobalDragContent, onM
             context.fillStyle = nightMode ? 
                 (prop.hover || prop.clicked ? "#fafcff" : "#b5b5b5") :
                 (prop.hover || prop.clicked ? "#1a1a1a" : "#000000");
-            context.fillText(prop.kanji, (x + offset.x) * canvas.width, (y + offset.y) * canvas.height);
+            context.fillText(prop.kanji, (x + offsetRef.current.x) * canvas.width, (y + offsetRef.current.y) * canvas.height);
         }
+
+        const now = new Date();
+        const deltaTime = now - lastTimeRef.current;
+        lastTimeRef.current = now;
+
+        const canvas = canvasRef.current;
+
         canvas.width = canvas.offsetWidth;
         canvas.height = canvas.offsetHeight;
+  
+        /**
+         * @type {CanvasRenderingContext2D}
+         */
+         const context = canvas.getContext('2d');
+        
+        context.beginPath();
+        const step = Math.max(canvas.width, canvas.height) / 20;
+        const left = -Math.ceil(canvas.width / step) * step * 100 + offsetRef.current.x * canvas.width;
+        const top =  -Math.ceil(canvas.height / step) * step * 100 + offsetRef.current.y * canvas.height;
+        const right = 2 * canvas.width;
+        const bottom = 2 * canvas.height;
+        context.beginPath();
+        for (let x = left; x < right; x += step) {
+            context.moveTo(x, top);
+            context.lineTo(x, bottom);
+        }
+        for (let y = top; y < bottom; y += step) {
+            context.moveTo(left, y);
+            context.lineTo(right, y);
+        }
+        context.strokeStyle = nightMode ? "#1C1C20" : "#F8F8FE";
+        context.lineWidth = 2;
+        context.stroke();
 
-        const context = canvas.getContext('2d');
+        context.drawImage(nightMode ? bgImageDark : bgImage, (0.5 + offsetRef.current.x) * canvas.width - bgImage.width / 2.0, (0.5 + offsetRef.current.y) * canvas.height - bgImage.height / 2.0);
 
-        context.drawImage(bgImage, (0.5 + offset.x) * canvas.width - bgImage.width / 2.0, (0.5 + offset.y) * canvas.height - bgImage.height / 2.0);
+        // delete zone
+        if (draggingRef.current && !(kanjiOnBoard.every(v => !v.clicked))) {
+            if (deleteZoneAnimation.current.progress < 1) {
+                deleteZoneAnimation.current.progress += deltaTime * 0.001;
+                deleteZoneAnimation.current.value = deleteZoneAnimation.current.progress * 0.6;
 
+                const x = easeInOutQuint(deleteZoneAnimation.current.value);
+                deleteZoneOffset.current = 0.07 + (x) * 0.03;
+                // console.log("update", deltaTime, deleteZoneAnimation.current.progress, deleteZoneAnimation.current.value);
+            }
+
+            const x = easeInOutQuint(deleteZoneAnimation.current.value);
+            const redValue = Math.min(Math.max(20, Math.floor(x * 255)), 255).toString(16);
+            const greenValue = Math.min(Math.max(20, Math.floor(x * 60)), 60).toString(16);
+            const blueValue = Math.min(Math.max(20, Math.floor(x * 90)), 90).toString(16);
+            const alphaValue = Math.min(Math.max(20, Math.floor(x * 140)), 140).toString(16);
+            context.fillStyle = "#" + redValue + greenValue + blueValue + alphaValue;
+            context.fillRect(0, (1 - deleteZoneOffset.current) * canvas.height, canvas.width, deleteZoneOffset.current * canvas.height);
+
+            context.drawImage(trashImageHover, 
+                (0.5) * canvas.width - trashImageHover.width / 2,
+                (1 - deleteZoneOffset.current * 0.5) * canvas.height - trashImageHover.height / 2,
+            );
+        } else {
+            deleteZoneOffset.current = 0.07;
+            context.fillStyle = "#00000050";
+            context.fillRect(0, (1 - deleteZoneOffset.current) * canvas.height, canvas.width, deleteZoneOffset.current * canvas.height);
+
+            context.drawImage(trashImage, 
+                (0.5) * canvas.width - trashImage.width / 2,
+                (1 - deleteZoneOffset.current * 0.5) * canvas.height - trashImage.height / 2,
+            );
+        }
+        
         kanjiOnBoard.forEach(_drawProp);
 
         if (globalDragContent?.prop.position) {
-            console.log(globalDragContent);
             _drawProp(globalDragContent.prop);
         }
-        // if (tempProp) _drawProp(tempProp);
+
+        animationRef.current = requestAnimationFrame(Update);
     };
-
-    const CanvasInit = () => {
-        /**
-         * @type {HTMLCanvasElement}
-         */
-        const canvas = canvasRef.current;
-        drawCanvas(canvas);
-
-        window.addEventListener('resize', () => drawCanvas(canvas));
-    };
-
     /**
      * 
      * @param {MouseEvent} event 
@@ -178,8 +276,6 @@ const WhiteBoard = ({ kanjiOnBoard, globalDragContent, setGlobalDragContent, onM
 
             hoverTest(event);
 
-            drawCanvas(event.target);
-
             return false;
         });
     }
@@ -192,7 +288,7 @@ const WhiteBoard = ({ kanjiOnBoard, globalDragContent, setGlobalDragContent, onM
         event.preventDefault();
 
         if (event.button === 0) {
-            setDragging(true);
+            draggingRef.current = true;
         }
 
         kanjiOnBoard.slice().reverse().every(v => {
@@ -211,8 +307,6 @@ const WhiteBoard = ({ kanjiOnBoard, globalDragContent, setGlobalDragContent, onM
 
             return false;
         });
-
-        drawCanvas(event.target);
     };
 
     /**
@@ -222,9 +316,10 @@ const WhiteBoard = ({ kanjiOnBoard, globalDragContent, setGlobalDragContent, onM
     const OnMouseMove = (event) => {
         let changed = false;
 
-        if (lastMousePos.x === -1 || lastMousePos.y === -1) setLastMousePos({x: event.pageX, y: event.pageY}); 
+        if (lastMousePosRef.current.x === -1 || lastMousePosRef.current.y === -1) 
+            lastMousePosRef.current = {x: event.pageX, y: event.pageY}; 
 
-        if (!dragging) {
+        if (!draggingRef.current) {
             if (hoverTest(event)) {
                 changed = true;
             }
@@ -233,8 +328,8 @@ const WhiteBoard = ({ kanjiOnBoard, globalDragContent, setGlobalDragContent, onM
         // move dragging object
         kanjiOnBoard.forEach(v => {
             if (v.clicked) {
-                v.position.x = event.pageX / event.target.width - offset.x;
-                v.position.y = event.pageY / event.target.height - offset.y;
+                v.position.x = event.pageX / event.target.width - offsetRef.current.x;
+                v.position.y = event.pageY / event.target.height - offsetRef.current.y;
 
                 changed = true;
             }
@@ -242,27 +337,21 @@ const WhiteBoard = ({ kanjiOnBoard, globalDragContent, setGlobalDragContent, onM
 
         if (globalDragContent) {
             globalDragContent.prop.position = {
-                x: event.pageX / event.target.width - offset.x,
-                y: event.pageY / event.target.height - offset.y
+                x: event.pageX / event.target.width - offsetRef.current.x,
+                y: event.pageY / event.target.height - offsetRef.current.y
             };
 
             changed = true;
         }
 
-        if (dragging && !changed) {
+        if (draggingRef.current && !changed) {
             console.log("dragging");
-            const newOffset = {
-                x: offset.x + (event.pageX - lastMousePos.x) / event.target.width,
-                y: offset.y + (event.pageY - lastMousePos.y) / event.target.height
-            };
-            setOffset(newOffset);
+            offsetRef.current.x += (event.pageX - lastMousePosRef.current.x) / event.target.width;
+            offsetRef.current.y += (event.pageY - lastMousePosRef.current.y) / event.target.height;
             changed = true;
         }
 
-        setLastMousePos({x: event.pageX, y: event.pageY});
-
-        if (changed)
-            drawCanvas(event.target);
+        lastMousePosRef.current = {x: event.pageX, y: event.pageY}; 
     };
 
     /**
@@ -270,12 +359,18 @@ const WhiteBoard = ({ kanjiOnBoard, globalDragContent, setGlobalDragContent, onM
      * @param {MouseEvent} event 
      */
     const OnMouseUp = (event) => {
-        if (dragging && event.button === 0) {
-            setDragging(false);
-            setLastMousePos({x:-1,y:-1});
+        if (draggingRef.current && event.button === 0) {
+            draggingRef.current = false;
+            lastMousePosRef.current = {x: -1, y: -1}; 
+
+            deleteZoneAnimation.current = {progress: 0, value: 0};
 
             kanjiOnBoard.forEach(v => {
                 if (v.clicked) {
+                    if (v.position.y + offsetRef.current.y > 1 - deleteZoneOffset.current) {
+                        onDelete(v);
+                    }
+
                     processOverlap(event.target, v);
                 }
 
@@ -283,8 +378,6 @@ const WhiteBoard = ({ kanjiOnBoard, globalDragContent, setGlobalDragContent, onM
             });
 
             hoverTest(event);
-
-            drawCanvas(event.target);
         }
 
         
@@ -294,14 +387,20 @@ const WhiteBoard = ({ kanjiOnBoard, globalDragContent, setGlobalDragContent, onM
             onAdd(globalDragContent.prop);
 
             processOverlap(event.target, globalDragContent.prop);
-
-            drawCanvas(event.target);
         }
     }
 
-    useEffect(CanvasInit);
+    useEffect(() => {
+        lastTimeRef.current = new Date();
+        animationRef.current = requestAnimationFrame(Update);
 
-    return (<div className={`WhiteBoard h-full w-full bg-gray-200 dark:bg-zinc-800`}>
+        return () => {
+            cancelAnimationFrame(animationRef.current);
+            animationRef.current = null;
+        }
+    });
+
+    return (<div className={`WhiteBoard h-full w-full bg-pannel-dark dark:bg-pannel-light-dark`}>
         <canvas
             ref={canvasRef}
             className={`h-full w-full`}
@@ -311,13 +410,12 @@ const WhiteBoard = ({ kanjiOnBoard, globalDragContent, setGlobalDragContent, onM
             onMouseMove={OnMouseMove}
             onMouseUp={OnMouseUp}
             onMouseLeave={(event) => {
-                if (dragging) {
+                if (draggingRef.current) {
                     OnMouseUp(event);
                 }
 
                 if (globalDragContent) {
                     globalDragContent.prop.position = undefined;
-                    drawCanvas(event.target);
                 }
             }}
             onWheel={(event) => {

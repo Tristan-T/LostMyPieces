@@ -33,7 +33,7 @@ const Kanji = ({kanji}) => {
                 )}
                 </span>
             </div>
-            <img className="m-auto contrast-200 mt-3 dark:invert" src={kanji.strokeGif}/>
+            <img className="m-auto contrast-200 mt-3 rounded-lg border-4 border-pannel-light dark:border-pannel-light-dark" src={kanji.strokeGif}/>
             <div>See on <a className="text-sky-400 after:content-['_↗']" href={"https://jisho.org/search/" + kanji.kanji + "%20%23kanji"} target="_blank">Jisho</a></div>
         </div>)
 }
