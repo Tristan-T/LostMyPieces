@@ -24,6 +24,7 @@
     "derivatives": [
       {
         "id": "人人",
+        "actualWord": "人々",
         "trueReading": "ひとびと",
         "priorities": [
           "news1",
@@ -64,6 +65,7 @@
       },
       {
         "id": "人日",
+        "actualWord": "人日",
         "trueReading": "にんにち",
         "priorities": [],
         "components": [
@@ -95,7 +97,9 @@
           ]
         ]
       }
-    ]
+    ],
+    "jlpt": "N5",
+    "strokeGif": "https://raw.githubusercontent.com/mistval/kanji_images/master/gifs/4eba.gif"
   },
   {
     "kanji": "一",
@@ -120,6 +124,7 @@
     "derivatives": [
       {
         "id": "一日一日",
+        "actualWord": "一日一日",
         "trueReading": "いちにちいちにち",
         "priorities": [],
         "components": [
@@ -148,6 +153,7 @@
       },
       {
         "id": "一人",
+        "actualWord": "一人で",
         "trueReading": "ひとりで",
         "priorities": [
           "ichi1"
@@ -191,6 +197,7 @@
       },
       {
         "id": "一日",
+        "actualWord": "一日",
         "trueReading": "つきたち",
         "priorities": [],
         "components": [
@@ -242,6 +249,7 @@
       },
       {
         "id": "一人一人",
+        "actualWord": "一人一人",
         "trueReading": "ひとりひとり",
         "priorities": [
           "news2",
@@ -275,6 +283,7 @@
       },
       {
         "id": "一一",
+        "actualWord": "一々",
         "trueReading": "いちいち",
         "priorities": [
           "ichi1"
@@ -308,7 +317,9 @@
           ]
         ]
       }
-    ]
+    ],
+    "jlpt": "N5",
+    "strokeGif": "https://raw.githubusercontent.com/mistval/kanji_images/master/gifs/4e00.gif"
   },
   {
     "kanji": "日",
@@ -335,6 +346,7 @@
     "derivatives": [
       {
         "id": "日日",
+        "actualWord": "日日",
         "trueReading": "ひにち",
         "priorities": [
           "news1",
@@ -383,6 +395,7 @@
       },
       {
         "id": "日一日",
+        "actualWord": "日一日と",
         "trueReading": "ひいちにちと",
         "priorities": [
           "news2",
@@ -406,6 +419,8 @@
           ]
         ]
       }
-    ]
+    ],
+    "jlpt": "N5",
+    "strokeGif": "https://raw.githubusercontent.com/mistval/kanji_images/master/gifs/65e5.gif"
   }
 ]
