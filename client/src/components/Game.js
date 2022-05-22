@@ -6,6 +6,7 @@ import WhiteBoard from "./Game/WhiteBoard";
 import Loading from "./Loading";
 import ModalManager from "./Modal/ModalManager";
 import ShopModal from "./Shop/ShopModal";
+import Tutorial from "./Tutorial";
 
 import { getKanjisUnlocked, getMerge } from "../services/api";
 
@@ -18,6 +19,7 @@ import {ReactComponent as StatsLogo} from '../svg/menu/stats.svg';
 import {ReactComponent as ShopLogo} from '../svg/menu/shop.svg';
 import {ReactComponent as HelpLogo} from '../svg/menu/help.svg';
 import {ReactComponent as EraseLogo} from '../svg/menu/erase.svg';
+
 
 /**
  * A kanji (one single japanese ideogram)
@@ -55,6 +57,7 @@ import {ReactComponent as EraseLogo} from '../svg/menu/erase.svg';
 
 const Game = () => {
     const [initialized, setInitialized] = useState(false);
+    const [showTutorial, setShowTutorial] = useState(localStorage.getItem("tutorial")?JSON.parse(localStorage.getItem("tutorial")):true);
     const [kanjiList, setKanjiList] = useState([]);
     const [kanjiOnBoard, setKanjiOnBoard] = useState(localStorage.getItem("kanjiOnBoard")?JSON.parse(localStorage.getItem("kanjiOnBoard")):[]);
     const [money, setMoney] = useState(localStorage.getItem("money")?JSON.parse(localStorage.getItem("money")):0);
@@ -199,9 +202,18 @@ const Game = () => {
         localStorage.setItem("money", JSON.stringify(money));
     }
 
+
+    /**
+     * Save in LocalStorage the tutorial state
+     */
+    const saveTutorial = () => {
+        localStorage.setItem("tutorial", JSON.stringify(showTutorial));
+    }
+
     useEffect(saveKanjiOnBoard, [kanjiOnBoard]);
     useEffect(saveUnlockedWords, [unlockedWords]);
     useEffect(saveMoney, [money]);
+    useEffect(saveTutorial, [showTutorial]);
 
     /*
     * UI manipulation
@@ -259,6 +271,7 @@ const Game = () => {
     console.log(setKanjiList);
     return (
         <div className={`Game h-screen w-screen flex ${globalDragContent ? "cursor-grabbing" : ""}`} onMouseMove={UpdateKanjiDrag} onMouseUp={EndKanjiDrag}>
+            <Tutorial setShowTutorial={setShowTutorial} showTutorial={showTutorial} />
             <div className="relative w-9/12 h-full" style={{pointerEvents:UIDisabled?"none":"auto"}}>
                 <WhiteBoard globalDragContent={globalDragContent} setGlobalDragContent={setGlobalDragContent} kanjiOnBoard={kanjiOnBoard} onMerge={OnMerge} onAdd={(v) => { setKanjiOnBoard([...kanjiOnBoard, v]) }} onDelete={(v) => { setKanjiOnBoard(kanjiOnBoard.filter(t => t !== v)); }} />
                 <div className="ui absolute top-2 right-2 text-2xl dark:text-gray-300" id="money" style={{pointerEvents:UIDisabled?"none":"auto"}}>${money}</div>
@@ -275,12 +288,8 @@ const Game = () => {
                     <EraseLogo onClick={() => setKanjiOnBoard([])} className="h-8 w-8 transition ease-in-out hover:scale-110 dark:hover:text-gray-50 hover:text-gray-800" />
                 </div>
 
-                <div onClick={() => toast.error("Not implemented")} className='rounded-full bg-pannel-dark dark:bg-pannel-dark-dark p-2'>
-                    <HelpLogo className="h-8 w-8 transition ease-in-out hover:scale-110 dark:hover:text-gray-50 hover:text-gray-800" />
-                </div>
-
-                <div onClick={() => toast.error("Not implemented")} className='rounded-full bg-pannel-dark dark:bg-pannel-dark-dark p-2'>
-                    <StatsLogo className="h-8 w-8 transition ease-in-out hover:scale-110 fill-blue" />
+                <div onClick={() => setShowTutorial(true)} className='rounded-full bg-pannel-dark dark:bg-pannel-dark-dark p-2'>
+                    <HelpLogo className="h-8 w-8 transition ease-in-out hover:scale-110 fill-blue" />
                 </div>
             </div>
             <OutsideClickHandler onOutsideClick={() => setShowShop(false)}>
