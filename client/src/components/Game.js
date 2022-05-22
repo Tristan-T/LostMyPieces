@@ -142,7 +142,7 @@ const Game = () => {
     const registerWord = (word) => {
         let index = unlockedWords.findIndex(w => w.word===word.word);
         if(index === -1) {
-            setUnlockedWords([...unlockedWords, {...word, tried:1}]);
+            setUnlockedWords(unlockedWords => [...unlockedWords, {...word, tried:1}]);
             const arrKanji = [...new Set(word.word.split(''))];
             arrKanji.forEach(k => {
                 let index = kanjiList.findIndex(kanji => kanji.kanji===k);
