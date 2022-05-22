@@ -30,7 +30,7 @@ The website should be successfully running.
 4. Type `npm install` to install the needed dependencies.
 5. Run `npm start` to make sure the website is working locally.
 6. Once you have confirmed that the website works, you can run `npm run build` to export the website.
-7. Copy the content of the `build` folder in your web server.
+7. Copy the content of the `/client/build` folder in your web server.
 
 The website should be successfully running.
 
@@ -53,6 +53,7 @@ sudo apt install neo4j
 ```bash
 cypher-shell
 ```
+> Additionally you may use the [tutorial at DigitalOcean](https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-neo4j-on-ubuntu-20-04) to learn more about the installation process of Neo4j.
 
 4. Import your database using the following script :
 ```cypher
@@ -123,4 +124,4 @@ If you wish to make your own kanji database, you can do so by providing a list o
 6. Use the `node buildDatabase.js listKanjis_custom.json databaseKanjiCustom.json` command to create your own JSON database.
 7. Make sure you also change the default kanjis inside the `config.json` at the root of the project.
 8. You can now follow the `Deploying my own API` section to run your own API.
-> **Note :** If you'd like to learn more about the database you generated, you may use `node countDatabase.js databaseKanjiCustom.json` to display more informations`
+> **Note :** If you'd like to learn more about the database you generated, you may use `node countDatabase.js databaseKanjiCustom.json` to display more informations
