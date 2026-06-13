@@ -26,22 +26,22 @@ module.exports = {
       neutral: colors.neutral,
       zinc: colors.zinc,
       stone: colors.stone,
-      'pannel-dark': {
+      'panel-dark': {
         light: "#0e0e10",
         dark: "#0C0C10",
         DEFAULT: "#ECECF4"
       },
-      'pannel-light': {
+      'panel-light': {
         light: "#FFFFFF",
         dark: "#121214",
         DEFAULT: "#FFFFFF"
       },
-      'pannel-blue': {
+      'panel-blue': {
         light: "#8121ff",
         dark: "#8121ff",
         DEFAULT: "#8121ff"
       },
-      'pannel-back': {
+      'panel-back': {
         light: "#F8F8FE",
         dark: "#1C1C20",
         DEFAULT: "#F8F8FE"

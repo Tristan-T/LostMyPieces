@@ -36,15 +36,15 @@ const ShopModal = ({showShop, setShowShop, money, setMoney, updateSidePanel, kan
             style={{overflowY:"hidden"}}
             timeout={1000}
             component="div"
-            className="p-2 m-0 rounded-r-md overflow-y-scroll absolute left-0 top-0 bg-pannel-back w-full sm:w-3/5 h-full dark:bg-pannel-back-dark"
+            className="p-2 m-0 rounded-r-md overflow-y-scroll absolute left-0 top-0 bg-panel-back w-full sm:w-3/5 h-full dark:bg-panel-back-dark"
         >
             <div>
                 <button
                     onClick={() => setShowShop(false)}
                     type="button"
                     className="absolute left-4 top-4 z-50  rounded-md p-2 inline-flex items-center justify-center 
-                        text-white hover:text-gray-500 dark:hover:bg-pannel-light-dark hover:bg-pannel-light 
-                        bg-pannel-blue dark:bg-pannel-blue-dark dark:hover:text-gray-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+                        text-white hover:text-gray-500 dark:hover:bg-panel-light-dark hover:bg-panel-light 
+                        bg-panel-blue dark:bg-panel-blue-dark dark:hover:text-gray-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
                     <span className="sr-only">Close menu</span>
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -56,7 +56,7 @@ const ShopModal = ({showShop, setShowShop, money, setMoney, updateSidePanel, kan
                         component="div"
                         id="shop-modal"
                         style={{pointerEvents: canBuy ? 'auto' : 'none'}}
-                        className="grid grid-cols-5 auto-rows-min gap-y-4 place-items-center pb-3"
+                        className="flex flex-col gap-y-4 items-center"
                         >
                         {kanjiListShop.map((v) => v.uses!==0?(
                                 <CSSTransition key={v.kanji} timeout={200}>

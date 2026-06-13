@@ -59,6 +59,7 @@ const WhiteBoard = ({ kanjiOnBoard, globalDragContent, setGlobalDragContent, onM
     const draggingRef = useRef(false);
     const animationRef = useRef(null);
     const lastTimeRef = useRef(null);
+    const lastTouch = useRef(null);
 
     const deleteZoneAnimation = useRef({progress: 0, value: 0});
 
@@ -102,6 +103,7 @@ const WhiteBoard = ({ kanjiOnBoard, globalDragContent, setGlobalDragContent, onM
      */
     const hoverTest = (event) => {
         let changed = false;
+        
 
         kanjiOnBoard.slice().reverse().every(v => {
             const bounds = getTextBound(event.target, v);
@@ -135,6 +137,7 @@ const WhiteBoard = ({ kanjiOnBoard, globalDragContent, setGlobalDragContent, onM
         let { x, y } = prop.position;
         x = (x + offsetRef.current.x);
         y = (y + offsetRef.current.y);
+        
 
         const context = canvas.getContext('2d');
 
@@ -391,6 +394,61 @@ const WhiteBoard = ({ kanjiOnBoard, globalDragContent, setGlobalDragContent, onM
         }
     }
 
+    /**
+     * 
+     *  TOUCH LOGIC
+     * 
+     */
+    
+    /**
+     * @param {TouchEvent} event
+     */
+    const OnTouchStart = (event) => {
+        event.preventDefault()
+        //console.log("touch event START");
+
+        const now = new Date().getTime();
+        const deltaTime = now - lastTouch.current;
+        
+
+        if (deltaTime < 500) {
+            console.log("Double tap");
+            lastTouch.current = 0;
+        } else {
+            console.log("Single tap");
+            
+            lastTouch.current = now;
+        }
+
+    }
+
+    /**
+     * @param {TouchEvent} event
+     */
+    const OnTouchMove = (event) => {
+        event.preventDefault()
+        //console.log("touch event MOVED");
+    }
+
+    /**
+     * @param {TouchEvent} event
+     */
+    const OnTouchCancel = (event) => {
+        event.preventDefault()
+        //console.log("touch event CANCEL");
+    }
+
+    /**
+     * @param {TouchEvent} event
+     */
+    const OnTouchEnd = (event) => {
+        event.preventDefault()
+        //console.log("touch event END");
+        //console.log(event);
+        
+    }
+
+
     useEffect(() => {
         lastTimeRef.current = new Date();
         animationRef.current = requestAnimationFrame(Update);
@@ -401,7 +459,7 @@ const WhiteBoard = ({ kanjiOnBoard, globalDragContent, setGlobalDragContent, onM
         }
     });
 
-    return (<div className={`WhiteBoard h-full w-full bg-pannel-dark dark:bg-pannel-light-dark`}>
+    return (<div className={`WhiteBoard h-full w-full bg-panel-dark dark:bg-panel-light-dark`}>
         <canvas
             ref={canvasRef}
             className={`h-full w-full`}
@@ -419,9 +477,11 @@ const WhiteBoard = ({ kanjiOnBoard, globalDragContent, setGlobalDragContent, onM
                     globalDragContent.prop.position = undefined;
                 }
             }}
-            onWheel={(event) => {
-                event.preventDefault();
-            }}
+            onTouchStart={OnTouchStart}
+            onTouchMove={OnTouchMove}
+            onTouchCancel={OnTouchCancel}
+            onTouchEnd={OnTouchEnd}
+            
         >
 
         </canvas>

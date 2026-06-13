@@ -10,19 +10,19 @@ const KanjiList = ({kanjiList, setKanjiList, openKanjiModal, onMouseDown}) => {
                 SidePanelMenu snap-start font-semibold"
         >
             <div className="cursor-pointer select-none w-full py-1 mx-2 my-1 md:rounded-lg 
-                bg-pannel-light dark:bg-pannel-light-dark hover:text-white hover:bg-pannel-blue hover:dark:bg-pannel-blue-dark duration-150"
+                bg-panel-light dark:bg-panel-light-dark hover:text-white hover:bg-panel-blue hover:dark:bg-panel-blue-dark duration-150"
                 onClick={() => {
                         const sortedKanjiList = [...kanjiList].sort((a, b) => b.foundCombinations - a.foundCombinations);
                         setKanjiList(sortedKanjiList);
                     }}>Total use</div>
             <div className="cursor-pointer select-none w-full py-1  mx-2 my-1 md:rounded-lg 
-                bg-pannel-light dark:bg-pannel-light-dark hover:text-white hover:bg-pannel-blue hover:dark:bg-pannel-blue-dark duration-15"
+                bg-panel-light dark:bg-panel-light-dark hover:text-white hover:bg-panel-blue hover:dark:bg-panel-blue-dark duration-15"
                 onClick={() => {
                     const sortedKanjiList = [...kanjiList].sort((a, b) => (b.nbCombinations - b.foundCombinations) - (a.nbCombinations - a.foundCombinations));
                     setKanjiList(sortedKanjiList);
                 }}>Use left</div>
             <div className="cursor-not-allowed select-none w-full py-1  mx-2 my-1 md:rounded-lg 
-                bg-pannel-dark dark:bg-pannel-dark-dark text-gray-500 duration-15">Unlocked</div>
+                bg-panel-dark dark:bg-panel-dark-dark text-gray-500 duration-15">Unlocked</div>
         </div>
         {
             kanjiList.map((v) => {
@@ -30,16 +30,15 @@ const KanjiList = ({kanjiList, setKanjiList, openKanjiModal, onMouseDown}) => {
                     <div
                         key={v.kanji}
                         className="
-                            bg-pannel-light dark:bg-pannel-light-dark rounded-lg hover:bg-pannel-dark hover:dark:bg-pannel-dark-dark
+                            bg-panel-light dark:bg-panel-light-dark rounded-lg hover:bg-panel-dark hover:dark:bg-panel-dark-dark
                             snap-start cursor-pointer mx-4 my-2
                             flex flex-col sm:flex-row items-center select-none duration-150"
                         onMouseDown={(event) => {onMouseDown(event, v)}}
                         onClick={() => openKanjiModal(v)}
                     >
-                        <div className="
-                            sm:bg-pannel-dark sm:dark:bg-pannel-dark-dark
-                            rounded-l-lg
-                            flex flex-col lg:py-4
+                        <div className="bg-gradient-to-b from-orange-500 to-red-500 
+                            rounded-lg
+                            flex flex-col lg:py-4 scale-110 shadow-md
                         ">
                             <div className="text-xs text-gray-700 dark:text-gray-500">{v.kun_readings[0]}</div>
                             <div className="text-4xl text-black sm:my-2 dark:text-gray-300 px-4">{v.kanji}</div>
@@ -48,7 +47,7 @@ const KanjiList = ({kanjiList, setKanjiList, openKanjiModal, onMouseDown}) => {
                                 font-black 
                                 rounded-bl-lg
                                 text-white
-                                bg-pannel-blue dark:bg-pannel-blue-dark
+                                bg-panel-blue dark:bg-panel-blue-dark
                                 "
                             >{v.foundCombinations} / {v.nbCombinations}</div>
                         </div>
@@ -58,7 +57,7 @@ const KanjiList = ({kanjiList, setKanjiList, openKanjiModal, onMouseDown}) => {
                         </div>
                         <div className="
                             text-xs w-full sm:w-auto block sm:hidden lg:block font-black
-                            text-white dark:text-white bg-pannel-blue dark:bg-pannel-blue-dark
+                            text-white dark:text-white bg-panel-blue dark:bg-panel-blue-dark
                             sm:self-start sm:px-4 py-1 rounded-b-lg sm:rounded-none sm:rounded-tr-lg sm:rounded-bl-lg">{v.foundCombinations}/{v.nbCombinations}</div>
                     </div>
                 )
@@ -86,7 +85,7 @@ const SidePanel = ({ kanjiList, setKanjiList, openKanjiModal, onMouseDown }) => 
 
     return (
         <div className="
-          bg-pannel-back dark:bg-pannel-back-dark dark:text-gray-300 h-full w-full">
+          bg-panel-back dark:bg-panel-back-dark dark:text-gray-300 h-full w-full">
             <div className="h-full flex flex-col">
                 {
                     currentTab == TABS.KANJIS ? 
@@ -98,14 +97,14 @@ const SidePanel = ({ kanjiList, setKanjiList, openKanjiModal, onMouseDown }) => 
                     <div 
                         className={
                             "text-center grow cursor-pointer select-none w-full py-4 duration-150 " + 
-                            (currentTab === TABS.KANJIS ? "bg-pannel-blue dark:bg-pannel-blue-dark text-pannel-dark dark:text-pannel-dark-dark" : "bg-pannel-dark dark:bg-pannel-dark-dark hover:text-pannel-blue hover:dark:text-pannel-blue-dark")
+                            (currentTab === TABS.KANJIS ? "bg-panel-blue dark:bg-panel-blue-dark text-panel-dark dark:text-panel-dark-dark" : "bg-panel-dark dark:bg-panel-dark-dark hover:text-panel-blue hover:dark:text-panel-blue-dark")
                         }
                         onClick={ () => setCurrentTab(TABS.KANJIS) }
                     >Kanjis</div>
                     <div 
                         className={
                             "text-center grow cursor-pointer select-none w-full py-4 duration-150 " + 
-                            (currentTab === TABS.QUESTS ? "bg-pannel-blue text-pannel-dark dark:text-pannel-dark-dark" : "bg-pannel-dark dark:bg-pannel-dark-dark hover:text-pannel-blue ")
+                            (currentTab === TABS.QUESTS ? "bg-panel-blue text-panel-dark dark:text-panel-dark-dark" : "bg-panel-dark dark:bg-panel-dark-dark hover:text-panel-blue ")
                         }
                         onClick={() => setCurrentTab(TABS.QUESTS)}
                     >Quests</div>

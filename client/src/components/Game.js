@@ -274,21 +274,21 @@ const Game = () => {
             <Tutorial setShowTutorial={setShowTutorial} showTutorial={showTutorial} />
             <div className="relative w-9/12 h-full" style={{pointerEvents:UIDisabled?"none":"auto"}}>
                 <WhiteBoard globalDragContent={globalDragContent} setGlobalDragContent={setGlobalDragContent} kanjiOnBoard={kanjiOnBoard} onMerge={OnMerge} onAdd={(v) => { setKanjiOnBoard([...kanjiOnBoard, v]) }} onDelete={(v) => { setKanjiOnBoard(kanjiOnBoard.filter(t => t !== v)); }} />
-                <div className="ui absolute top-2 right-2 text-2xl dark:text-gray-300" id="money" style={{pointerEvents:UIDisabled?"none":"auto"}}>${money}</div>
+                <div className="ui absolute top-2 right-2 text-2xl dark:text-gray-300 select-none" id="money" style={{pointerEvents:UIDisabled?"none":"auto"}}>${money}</div>
             </div>
             <div className="w-3/12 h-full" style={{pointerEvents:UIDisabled?"none":"auto"}}>
                 <SidePanel kanjiList={kanjiList} setKanjiList={setKanjiList} openKanjiModal={openKanjiModal} onMouseDown={InitKanjiDrag} />
             </div>
             <div className="ui absolute ui top-4 left-2 text-5xl gray flex flex-row dark:text-gray-300 space-x-2" style={{pointerEvents:UIDisabled?"none":"auto"}}>
-                <div className='rounded-full bg-pannel-dark dark:bg-pannel-dark-dark p-2'>
+                <div className='rounded-full bg-panel-dark dark:bg-panel-dark-dark p-2'>
                     <ShopLogo onClick={() => setShowShop(!showShop)} className="h-8 w-8 transition ease-in-out hover:scale-110 dark:hover:text-gray-50 hover:text-gray-800" />
                 </div>
 
-                <div className='rounded-full bg-pannel-dark dark:bg-pannel-dark-dark p-2'>
+                <div className='rounded-full bg-panel-dark dark:bg-panel-dark-dark p-2'>
                     <EraseLogo onClick={() => setKanjiOnBoard([])} className="h-8 w-8 transition ease-in-out hover:scale-110 dark:hover:text-gray-50 hover:text-gray-800" />
                 </div>
 
-                <div onClick={() => setShowTutorial(true)} className='rounded-full bg-pannel-dark dark:bg-pannel-dark-dark p-2'>
+                <div onClick={() => setShowTutorial(true)} className='rounded-full bg-panel-dark dark:bg-panel-dark-dark p-2'>
                     <HelpLogo className="h-8 w-8 transition ease-in-out hover:scale-110 fill-blue" />
                 </div>
             </div>

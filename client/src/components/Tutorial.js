@@ -8,7 +8,7 @@ import screenPng from "../images/screen.png";
 const Tutorial = ({showTutorial, setShowTutorial}) => {
     if(!showTutorial) return null;
     return (
-    <div className="darken-screen rounded-lg absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-black dark:text-white bg-pannel-back dark:bg-pannel-back-dark z-50">
+    <div className="darken-screen rounded-lg absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-black dark:text-white bg-panel-back dark:bg-panel-back-dark z-50">
         <div className="w-full">
             <Carousel showThumbs={false}>
                 <div>
@@ -34,8 +34,8 @@ const Tutorial = ({showTutorial, setShowTutorial}) => {
             </Carousel>
             <button className="rounded-b-lg w-full pb-1 pt-1
                         duration-500
-                        bg-pannel-blue dark:bg-pannel-blue-dark
-                        text-white hover:text-pannel-blue hover:dark:text-pannel-blue-dark hover:bg-white text-center" onClick={ () => setShowTutorial(false) }>Start playing
+                        bg-panel-blue dark:bg-panel-blue-dark
+                        text-white hover:text-panel-blue hover:dark:text-panel-blue-dark hover:bg-white text-center" onClick={ () => setShowTutorial(false) }>Start playing
             </button>
         </div>
     </div>
