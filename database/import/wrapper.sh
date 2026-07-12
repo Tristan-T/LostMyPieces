@@ -32,11 +32,11 @@ else
     echo "[wrapper.sh] Importing data into Neo4j database..."
     echo "[wrapper.sh] Using kanji file : ${JSON_URL}"
 
-    # Create a symlink to the JSON file in the /import directory and overwrite if it already exists
-    ln -sf "$JSON_URL" /import/kanji.json || { echo "Failed to create symlink for kanji.json, aborting import."; exit 1; }
+    # Create a copy to the JSON file in the /import directory and overwrite if it already exists
+    cp -f "$JSON_URL" /var/lib/neo4j/import/kanji.json || { echo "Failed to copy kanji.json, aborting import."; exit 1; }
 
     # Run the Cypher script to import data using NEO4J_AUTH_FILE
-    cypher-shell -p "$NEO4J_PASSWORD" -u "$NEO4J_USER"  -f /import/LOAD_DATABASE.cypher || { echo "cypher-shell failed, aborting import."; exit 1; }
+    cypher-shell -p "$NEO4J_PASSWORD" -u "$NEO4J_USER"  -f ./import/LOAD_DATABASE.cypher || { echo "cypher-shell failed, aborting import."; exit 1; }
 
     # Create a flag file to indicate that the import has been done
     touch /data/neo4j_initialized.flag

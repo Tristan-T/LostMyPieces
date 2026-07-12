@@ -12,6 +12,9 @@ RUN curl -L https://github.com/neo4j/apoc/releases/download/2026.05.0/apoc-2026.
 # Copy kanji files
 COPY . .
 
+# Make wrapper script executable
+RUN chmod +x ./import/wrapper.sh
+
 # Web interface (not needed)
 EXPOSE 7474
 # Bolt protocol
@@ -19,4 +22,4 @@ EXPOSE 7687
 
 ENV NEO4J_apoc_import_file_enabled=true
 
-ENTRYPOINT ["/import/wrapper.sh"]
+ENTRYPOINT ["/bin/bash", "./import/wrapper.sh"]
