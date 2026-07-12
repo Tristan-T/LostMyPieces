@@ -51,9 +51,12 @@ const getAllWords = async (req, reply) => {
  */
 const getWord = async (req, reply) => {
   console.log('Word : ' + req.params.id);
-  const query = `MATCH (v:Variant)<-[:VARIANT*..]-(w:Word {word:$id})-[:DEFINITION*..]->(d:Definition)
-                 RETURN w {.*, definitions: collect(DISTINCT d.def), variants: collect(DISTINCT v {pronounced:v.pronounced, variant: v.variant})}
-                `
+  const query = `MATCH (v:Variant)<-[:VARIANT*1..]-(w:Word {word:$id})-[:DEFINITION*1..]->(d:Definition)
+                        WITH
+                          w,
+                          collect(DISTINCT d.def) AS definitions,
+                          collect(DISTINCT v {pronounced: v.pronounced, variant: v.variant}) AS variants
+                        RETURN w {.*, definitions: definitions, variants: variants}`
   let queryRes = await req.neoSession.run(query, req.params);
   reply.type("application/json");
   req.neoSession.close()
@@ -214,6 +217,12 @@ async function mergeL5(neoSession, listKanji) {
   return Array.from(queryRes.records, node => node.get("w").properties);
 }
 
+const getDebug = async (req, reply) => {
+  console.log('Debug');
+  reply.type("application/json");
+  return ['debug'];
+}
+
 module.exports = {
   getAllKanjis,
   getKanji,
@@ -222,5 +231,6 @@ module.exports = {
   getCountCombinationShop,
   getTotalUse,
   getMerge,
-  getKanjisUnlocked
+  getKanjisUnlocked,
+  getDebug
 }

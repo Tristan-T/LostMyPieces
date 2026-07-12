@@ -42,6 +42,11 @@ const routes = [
     method: 'POST',
     url: '/getKanjisUnlocked',
     handler: controller.getKanjisUnlocked
+  },
+  {
+    method: 'GET',
+    url: '/debug',
+    handler: controller.getDebug
   }
 ]
 

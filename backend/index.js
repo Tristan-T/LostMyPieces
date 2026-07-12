@@ -2,10 +2,13 @@
 const fs = require('fs');
 let config;
 try {
-  config = JSON.parse(fs.readFileSync('../config.json'));
+  config = JSON.parse(fs.readFileSync('config.json'));
 } catch (err) {
   console.log(err);
 }
+
+const PORT = parseInt(process.env.PORT, 10) || 3000;
+const HOST = process.env.HOST || '0.0.0.0';
 
 // Importing and instantiating Fastify
 const app = require('fastify')({logger: true})
@@ -39,7 +42,7 @@ routes.forEach((route, index) => {
     app.route(route)
 })
 
-app.listen(8000, (err, address) => {
+app.listen({port: PORT, host: HOST}, (err, address) => {
     if (err) {
         app.log.error(err)
         process.exit(1)

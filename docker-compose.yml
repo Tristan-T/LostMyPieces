@@ -1,0 +1,44 @@
+services:
+  neo4j:
+    build: ./database
+    image: torisu01/lostmypieces_neo4j:latest
+    volumes:
+      - ./database/logs:/logs
+      - ./database/conf:/conf
+      - ./database/data:/data
+#      - ./database/plugins:/var/lib/neo4j/plugins #APOC
+      - ./database/import:/import
+    environment:
+      - NEO4J_AUTH_FILE=/run/secrets/neo4j_auth_file
+      - NEO4J_PLUGINS=["apoc"]
+      - NEO4J_apoc_import_file_enabled=true
+      - JSON_URL=/import/databaseKanjiBig.json
+      - DBMS_USAGE__REPORT_ENABLED=false
+      - NEO4J_ACCEPT_LICENSE_AGREEMENT=yes
+    ports:
+      - "7474:7474" #HTTPS
+      - "7687:7687" #Bolt
+    secrets:
+      - neo4j_auth_file
+  #    restart: always
+  react:
+    build: ./client
+    image: torisu01/lostmypieces_react:latest
+    ports:
+      - "8080:8080"
+#    restart: always
+    depends_on:
+      - backend
+  backend:
+    build: ./backend
+    image: torisu01/lostmypieces_backend:latest
+    volumes:
+      - ./config.json:/app/config.json:ro
+    ports:
+      - "3000:3000"
+#    restart: always
+    depends_on:
+      - neo4j
+secrets:
+  neo4j_auth_file:
+    file: ./neo4j_auth.txt

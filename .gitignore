@@ -3,3 +3,5 @@
 **/.idea/*
 config.json
 *.bak
+*.env
+neo4j_auth.txt

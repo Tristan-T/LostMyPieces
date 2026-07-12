@@ -1,9 +1,9 @@
 {
 	"database" : {
-		"uri" : "",
-		"user" : "",
+		"uri" : "bolt://localhost:7687",
+		"user" : "neo4j",
 		"password" : ""
-	}
+	},
 	"client" : {
 		"baseKanjis" : ["一", "人", "日"]
 	}
