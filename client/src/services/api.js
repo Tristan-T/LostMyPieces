@@ -1,5 +1,5 @@
 // Use environment variable if provided, otherwise construct from window location
-const API = process.env.REACT_APP_API_URL || `http://${window.location.hostname}:3000`
+const API = process.env.REACT_APP_API_URL || `https://api.lostmypieces.com`
 
 export function getKanjisList() {
     return fetch(API + "/kanjis")
